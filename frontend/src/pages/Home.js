@@ -3,18 +3,19 @@ import { useSelector, useDispatch } from "react-redux";
 
 // components
 import WorkoutDetails from "../components/WorkoutDetails";
+import WorkoutForm from "../components/WorkoutForm";
 
 // slices
 import {
 	selectAllWorkouts,
 	fetchWorkouts,
+	selectWorkoutStatus,
 } from "../redux/features/workoutsSlice";
 
 const Home = () => {
 	const dispatch = useDispatch();
 	const workouts = useSelector(selectAllWorkouts);
-	const workoutStatus = useSelector((state) => state.workouts.status);
-	const error = useSelector((state) => state.workouts.error);
+	const workoutStatus = useSelector(selectWorkoutStatus);
 
 	useEffect(() => {
 		if (workoutStatus === "idle") {
@@ -22,27 +23,15 @@ const Home = () => {
 		}
 	}, [workoutStatus, dispatch]);
 
-	let content;
-
-	if (workoutStatus === "loading") {
-		content = <h1>Loading</h1>;
-	} else if (workoutStatus === "succeeded") {
-		content = (
+	return (
+		<section className="workouts-list">
+			<WorkoutForm />
+			<h2>Workouts</h2>
 			<ul>
 				{workouts.map((workout) => (
-					// <li key={workout._id}>{workout.title}</li>
 					<WorkoutDetails key={workout._id} workout={workout} />
 				))}
 			</ul>
-		);
-	} else if (workoutStatus === "failed") {
-		content = <div>{error}</div>;
-	}
-
-	return (
-		<section className="posts-list">
-			<h2>Posts</h2>
-			{content}
 		</section>
 	);
 };

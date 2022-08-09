@@ -4,6 +4,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // initial state
 const initialState = {
 	workouts: [],
+	emptyFields: [],
 	status: "idle",
 	error: null,
 };
@@ -13,8 +14,7 @@ export const fetchWorkouts = createAsyncThunk(
 	"workouts/fetchWorkouts",
 	async () => {
 		const response = await fetch("/api/workouts");
-		const json = response.json();
-		return json;
+		return response.json();
 	}
 );
 
@@ -24,8 +24,29 @@ export const deleteWorkout = createAsyncThunk(
 		const response = await fetch(`/api/workouts/${workout._id}`, {
 			method: "DELETE",
 		});
-		const json = response.json();
-		return json;
+		return response.json();
+	}
+);
+
+export const createWorkout = createAsyncThunk(
+	"workouts/createWorkout",
+	async (workout, { rejectWithValue }) => {
+		const response = await fetch("/api/workouts", {
+			method: "POST",
+			body: JSON.stringify(workout),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+
+		if (!response.ok) {
+			const json = await response.json();
+			return rejectWithValue(json);
+		}
+
+		if (response.ok) {
+			return response.json();
+		}
 	}
 );
 
@@ -59,6 +80,18 @@ const workoutsSlice = createSlice({
 			.addCase(deleteWorkout.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.error.message;
+			})
+			.addCase(createWorkout.pending, (state, action) => {
+				state.status = "loading";
+			})
+			.addCase(createWorkout.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				state.workouts = [action.payload, ...state.workouts];
+			})
+			.addCase(createWorkout.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error.message;
+				state.emptyFields = action.payload.emptyFields;
 			});
 	},
 });
@@ -68,3 +101,6 @@ export default workoutsSlice.reducer;
 
 // selectors
 export const selectAllWorkouts = (state) => state.workouts.workouts;
+export const selectWorkoutStatus = (state) => state.workouts.status;
+export const selectWorkoutError = (state) => state.workouts.error;
+export const selectWorkoutFields = (state) => state.workouts.emptyFields;

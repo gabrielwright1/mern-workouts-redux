@@ -1,5 +1,13 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+	createWorkout,
+	selectAllWorkouts,
+	selectWorkoutStatus,
+	selectWorkoutError,
+	selectWorkoutFields,
+} from "../redux/features/workoutsSlice";
 
 const WorkoutForm = () => {
 	const dispatch = useDispatch();
@@ -10,39 +18,38 @@ const WorkoutForm = () => {
 	const [error, setError] = useState(null);
 	const [emptyFields, setEmptyFields] = useState([]);
 
+	// const workouts = useSelector(selectAllWorkouts);
+	const workoutStatus = useSelector(selectWorkoutStatus);
+	const workoutError = useSelector(selectWorkoutError);
+	const workoutFields = useSelector(selectWorkoutFields);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		const workout = { title, load, reps };
 
-		const response = await fetch("/api/workouts", {
-			method: "POST",
-			body: JSON.stringify(workout),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		const json = await response.json();
+		dispatch(createWorkout(workout));
+	};
 
-		if (!response.ok) {
-			setError(json.error);
-			setEmptyFields(json.emptyFields);
+	useEffect(() => {
+		if (workoutStatus === "failed") {
+			setError(workoutError);
+			setEmptyFields(workoutFields);
 		}
-		if (response.ok) {
+		if (workoutStatus === "succeeded") {
 			setEmptyFields([]);
 			setError(null);
 			setTitle("");
 			setLoad("");
 			setReps("");
-			dispatch({ type: "CREATE_WORKOUT", payload: json });
 		}
-	};
+	}, [workoutStatus, workoutError, workoutFields]);
 
 	return (
 		<form className="create" onSubmit={handleSubmit}>
 			<h3>Add a New Workout</h3>
 
-			<label>Excersize Title:</label>
+			<label>Exercise Title:</label>
 			<input
 				type="text"
 				onChange={(e) => setTitle(e.target.value)}

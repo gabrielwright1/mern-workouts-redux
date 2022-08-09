@@ -1,5 +1,4 @@
 import { useDispatch } from "react-redux";
-
 import { deleteWorkout } from "../redux/features/workoutsSlice";
 
 // date fns
@@ -9,11 +8,11 @@ const WorkoutDetails = ({ workout }) => {
 	const dispatch = useDispatch();
 
 	const handleClick = async () => {
-		await dispatch(deleteWorkout(workout));
+		dispatch(deleteWorkout(workout));
 	};
 
 	return (
-		<div className="workout-details">
+		<li className="workout-details">
 			<h4>{workout.title}</h4>
 			<p>
 				<strong>Load (kg): </strong>
@@ -28,12 +27,11 @@ const WorkoutDetails = ({ workout }) => {
 					addSuffix: true,
 				})}
 				<br />
-				{workout.createdAt}
 			</p>
 			<span className="material-symbols-outlined" onClick={handleClick}>
 				delete
 			</span>
-		</div>
+		</li>
 	);
 };
 
