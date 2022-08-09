@@ -14,7 +14,17 @@ export const fetchWorkouts = createAsyncThunk(
 	async () => {
 		const response = await fetch("/api/workouts");
 		const json = response.json();
-		console.log(json);
+		return json;
+	}
+);
+
+export const deleteWorkout = createAsyncThunk(
+	"workouts/deleteWorkout",
+	async (workout) => {
+		const response = await fetch(`/api/workouts/${workout._id}`, {
+			method: "DELETE",
+		});
+		const json = response.json();
 		return json;
 	}
 );
@@ -34,6 +44,19 @@ const workoutsSlice = createSlice({
 				state.workouts = state.workouts.concat(action.payload);
 			})
 			.addCase(fetchWorkouts.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error.message;
+			})
+			.addCase(deleteWorkout.pending, (state, action) => {
+				state.status = "loading";
+			})
+			.addCase(deleteWorkout.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				state.workouts = state.workouts.filter((workout) => {
+					return workout._id !== action.payload._id;
+				});
+			})
+			.addCase(deleteWorkout.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.error.message;
 			});

@@ -1,5 +1,7 @@
 import { useDispatch } from "react-redux";
 
+import { deleteWorkout } from "../redux/features/workoutsSlice";
+
 // date fns
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
@@ -7,14 +9,7 @@ const WorkoutDetails = ({ workout }) => {
 	const dispatch = useDispatch();
 
 	const handleClick = async () => {
-		// REFACTOR BELOW
-		// const response = await fetch("/api/workouts/" + workout._id, {
-		// 	method: "DELETE",
-		// });
-		// const json = await response.json();
-		// if (response.ok) {
-		// 	dispatch({ type: "DELETE_WORKOUT", payload: json });
-		// }
+		await dispatch(deleteWorkout(workout));
 	};
 
 	return (
@@ -32,6 +27,8 @@ const WorkoutDetails = ({ workout }) => {
 				{formatDistanceToNow(new Date(workout.createdAt), {
 					addSuffix: true,
 				})}
+				<br />
+				{workout.createdAt}
 			</p>
 			<span className="material-symbols-outlined" onClick={handleClick}>
 				delete
