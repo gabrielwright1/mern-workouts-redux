@@ -27,6 +27,25 @@ export const deleteWorkout = createAsyncThunk(
 		return response.json();
 	}
 );
+export const updateWorkout = createAsyncThunk(
+	"workouts/updateWorkout",
+	async (workout, { rejectWithValue }) => {
+		const response = await fetch(`/api/workouts/${workout.id}`, {
+			method: "PATCH",
+			body: JSON.stringify(workout),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		if (!response.ok) {
+			const json = await response.json();
+			return rejectWithValue(json);
+		}
+		if (response.ok) {
+			return response.json();
+		}
+	}
+);
 
 export const createWorkout = createAsyncThunk(
 	"workouts/createWorkout",
@@ -92,6 +111,26 @@ const workoutsSlice = createSlice({
 				state.status = "failed";
 				state.error = action.error.message;
 				state.emptyFields = action.payload.emptyFields;
+			})
+			.addCase(updateWorkout.pending, (state, action) => {
+				state.status = "loading";
+			})
+			.addCase(updateWorkout.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				console.log(action.payload);
+				const {
+					arg: { id },
+				} = action.meta;
+				if (id) {
+					state.workouts = state.workouts.map((item) =>
+						item._id === id ? action.payload : item
+					);
+				}
+			})
+			.addCase(updateWorkout.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.error.message;
+				// state.emptyFields = action.payload.emptyFields;
 			});
 	},
 });

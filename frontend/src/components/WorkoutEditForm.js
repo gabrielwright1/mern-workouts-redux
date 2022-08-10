@@ -2,15 +2,16 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
-	createWorkout,
+	updateWorkout,
 	selectWorkoutStatus,
 	selectWorkoutError,
 	selectWorkoutFields,
 } from "../redux/features/workoutsSlice";
 
-const WorkoutForm = () => {
+const WorkoutEditForm = ({ workoutId }) => {
 	const dispatch = useDispatch();
 
+	const [id, setId] = useState("");
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
@@ -23,8 +24,8 @@ const WorkoutForm = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const workout = { title, load, reps };
-		dispatch(createWorkout(workout));
+		const workout = { id, title, load, reps };
+		dispatch(updateWorkout(workout));
 	};
 
 	useEffect(() => {
@@ -41,10 +42,12 @@ const WorkoutForm = () => {
 		}
 	}, [workoutStatus, workoutError, workoutFields]);
 
-	return (
-		<form className="create" onSubmit={handleSubmit}>
-			<h3>Add a New Workout</h3>
+	useEffect(() => {
+		setId(workoutId);
+	}, [workoutId]);
 
+	return (
+		<form className="edit" onSubmit={handleSubmit}>
 			<label>Exercise Title:</label>
 			<input
 				type="text"
@@ -68,11 +71,10 @@ const WorkoutForm = () => {
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
-
-			<button>Add Workout</button>
+			<button>Edit Workout</button>
 			{error && <div className="error">{error}</div>}
 		</form>
 	);
 };
 
-export default WorkoutForm;
+export default WorkoutEditForm;

@@ -1,5 +1,9 @@
 import { useDispatch } from "react-redux";
 import { deleteWorkout } from "../redux/features/workoutsSlice";
+import { useState } from "react";
+
+// components
+import WorkoutEditForm from "./WorkoutEditForm";
 
 // date fns
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
@@ -7,8 +11,14 @@ import formatDistanceToNow from "date-fns/formatDistanceToNow";
 const WorkoutDetails = ({ workout }) => {
 	const dispatch = useDispatch();
 
-	const handleClick = async () => {
+	const [editable, setEditable] = useState(false);
+
+	const handleDelete = async () => {
 		dispatch(deleteWorkout(workout));
+	};
+
+	const handleEdit = async () => {
+		setEditable(true);
 	};
 
 	return (
@@ -26,11 +36,16 @@ const WorkoutDetails = ({ workout }) => {
 				{formatDistanceToNow(new Date(workout.createdAt), {
 					addSuffix: true,
 				})}
-				<br />
 			</p>
-			<span className="material-symbols-outlined" onClick={handleClick}>
+			{!editable && (
+				<button className="edit-button" onClick={handleEdit}>
+					Edit
+				</button>
+			)}
+			<span className="material-symbols-outlined" onClick={handleDelete}>
 				delete
 			</span>
+			{editable && <WorkoutEditForm workoutId={workout._id} />}
 		</li>
 	);
 };
