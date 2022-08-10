@@ -27,25 +27,6 @@ export const deleteWorkout = createAsyncThunk(
 		return response.json();
 	}
 );
-export const updateWorkout = createAsyncThunk(
-	"workouts/updateWorkout",
-	async (workout, { rejectWithValue }) => {
-		const response = await fetch(`/api/workouts/${workout.id}`, {
-			method: "PATCH",
-			body: JSON.stringify(workout),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		});
-		if (!response.ok) {
-			const json = await response.json();
-			return rejectWithValue(json);
-		}
-		if (response.ok) {
-			return response.json();
-		}
-	}
-);
 
 export const createWorkout = createAsyncThunk(
 	"workouts/createWorkout",
@@ -57,14 +38,34 @@ export const createWorkout = createAsyncThunk(
 				"Content-Type": "application/json",
 			},
 		});
+		const json = await response.json();
 
 		if (!response.ok) {
-			const json = await response.json();
 			return rejectWithValue(json);
 		}
-
 		if (response.ok) {
-			return response.json();
+			return json;
+		}
+	}
+);
+
+export const updateWorkout = createAsyncThunk(
+	"workouts/updateWorkout",
+	async (workout, { rejectWithValue }) => {
+		const response = await fetch(`/api/workouts/${workout.id}`, {
+			method: "PATCH",
+			body: JSON.stringify(workout),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const json = await response.json();
+
+		if (!response.ok) {
+			return rejectWithValue(json);
+		}
+		if (response.ok) {
+			return json;
 		}
 	}
 );
@@ -117,15 +118,11 @@ const workoutsSlice = createSlice({
 			})
 			.addCase(updateWorkout.fulfilled, (state, action) => {
 				state.status = "succeeded";
-				console.log(action.payload);
-				const {
-					arg: { id },
-				} = action.meta;
-				if (id) {
-					state.workouts = state.workouts.map((item) =>
-						item._id === id ? action.payload : item
-					);
-				}
+				state.workouts = state.workouts.map((workout) =>
+					workout._id === action.payload._id
+						? action.payload
+						: workout
+				);
 			})
 			.addCase(updateWorkout.rejected, (state, action) => {
 				state.status = "failed";

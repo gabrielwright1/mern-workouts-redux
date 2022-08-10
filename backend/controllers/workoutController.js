@@ -84,7 +84,8 @@ const updateWorkout = async (req, res) => {
 		{ _id: id },
 		{
 			...req.body,
-		}
+		},
+		{ returnDocument: "after" }
 	);
 
 	if (!workout) {
