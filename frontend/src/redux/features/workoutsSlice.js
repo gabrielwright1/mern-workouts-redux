@@ -127,7 +127,7 @@ const workoutsSlice = createSlice({
 			.addCase(updateWorkout.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.error.message;
-				// state.emptyFields = action.payload.emptyFields;
+				state.emptyFields = action.payload.emptyFields;
 			});
 	},
 });

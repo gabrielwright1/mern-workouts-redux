@@ -8,10 +8,10 @@ import {
 	selectWorkoutFields,
 } from "../redux/features/workoutsSlice";
 
-const WorkoutEditForm = ({ workoutId }) => {
+const WorkoutEditForm = ({ workoutId, handleClose }) => {
 	const dispatch = useDispatch();
 
-	const [id, setId] = useState("");
+	const [id, setId] = useState(workoutId);
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
@@ -21,12 +21,6 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const workoutStatus = useSelector(selectWorkoutStatus);
 	const workoutError = useSelector(selectWorkoutError);
 	const workoutFields = useSelector(selectWorkoutFields);
-
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		const workout = { id, title, load, reps };
-		dispatch(updateWorkout(workout));
-	};
 
 	useEffect(() => {
 		if (workoutStatus === "failed") {
@@ -42,9 +36,12 @@ const WorkoutEditForm = ({ workoutId }) => {
 		}
 	}, [workoutStatus, workoutError, workoutFields]);
 
-	useEffect(() => {
-		setId(workoutId);
-	}, [workoutId]);
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		const workout = { id, title, load, reps };
+		await dispatch(updateWorkout(workout));
+		handleClose();
+	};
 
 	return (
 		<form className="edit" onSubmit={handleSubmit}>
@@ -71,7 +68,10 @@ const WorkoutEditForm = ({ workoutId }) => {
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
-			<button>Edit Workout</button>
+			<button className="close-btn" onClick={handleClose}>
+				Close
+			</button>
+			<button className="update-btn">Update</button>
 			{error && <div className="error">{error}</div>}
 		</form>
 	);

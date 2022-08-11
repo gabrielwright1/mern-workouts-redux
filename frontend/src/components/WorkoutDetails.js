@@ -21,9 +21,12 @@ const WorkoutDetails = ({ workout }) => {
 		setEditable(true);
 	};
 
+	const handleClose = () => {
+		setEditable(false);
+	};
+
 	return (
 		<li className="workout-details">
-			{/* {workout._id} */}
 			<h4>{workout.title}</h4>
 			<p>
 				<strong>Load (kg): </strong>
@@ -34,19 +37,31 @@ const WorkoutDetails = ({ workout }) => {
 				{workout.reps}
 			</p>
 			<p>
+				<strong>Created: </strong>
 				{formatDistanceToNow(new Date(workout.createdAt), {
 					addSuffix: true,
 				})}
 			</p>
+			<p>
+				<strong>Updated: </strong>
+				{formatDistanceToNow(new Date(workout.updatedAt), {
+					addSuffix: true,
+				})}
+			</p>
 			{!editable && (
-				<button className="edit-button" onClick={handleEdit}>
+				<button className="edit-btn" onClick={handleEdit}>
 					Edit
 				</button>
 			)}
 			<span className="material-symbols-outlined" onClick={handleDelete}>
 				delete
 			</span>
-			{editable && <WorkoutEditForm workoutId={workout._id} />}
+			{editable && (
+				<WorkoutEditForm
+					workoutId={workout._id}
+					handleClose={handleClose}
+				/>
+			)}
 		</li>
 	);
 };

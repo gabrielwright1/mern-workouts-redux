@@ -6,6 +6,7 @@
 	--primary: #1aac83;
 	--error: #e7195a;
 }
+
 body {
 	background: #f1f1f1;
 	margin: 0;
@@ -66,15 +67,18 @@ header a {
 	border-radius: 50%;
 	color: #333;
 }
-
-.workout-details button {
+.update-btn,
+.edit-btn {
 	position: absolute;
 	right: 20px;
-	bottom: 20px;
-	padding: 5px 10px;
-	border-radius: 4px;
-	border: none;
+	bottom: 15px;
 }
+.close-btn {
+	position: absolute;
+	right: 100px;
+	bottom: 15px;
+}
+
 .workouts-list ul {
 	list-style-type: none;
 	padding: 0;
@@ -94,7 +98,7 @@ input {
 	border-radius: 4px;
 	box-sizing: border-box;
 }
-form button {
+button {
 	background: var(--primary);
 	border: 0;
 	color: #fff;
@@ -102,6 +106,8 @@ form button {
 	font-family: "Poppins";
 	border-radius: 4px;
 	cursor: pointer;
+	padding: 5px 10px;
+	border-radius: 4px;
 }
 div.error {
 	padding: 10px;
@@ -113,11 +119,4 @@ div.error {
 }
 input.error {
 	border: 1px solid var(--error);
-}
-
-/* edit workout form */
-.edit button {
-	border-radius: 4px;
-	position: absolute;
-	bottom: 13px;
 }
