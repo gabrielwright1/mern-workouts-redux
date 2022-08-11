@@ -2,13 +2,14 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+	closeForm,
 	updateWorkout,
 	selectWorkoutStatus,
 	selectWorkoutError,
 	selectWorkoutFields,
 } from "../redux/features/workoutsSlice";
 
-const WorkoutEditForm = ({ workoutId, handleClose }) => {
+const WorkoutEditForm = ({ workoutId }) => {
 	const dispatch = useDispatch();
 
 	const [id, setId] = useState(workoutId);
@@ -40,7 +41,12 @@ const WorkoutEditForm = ({ workoutId, handleClose }) => {
 		e.preventDefault();
 		const workout = { id, title, load, reps };
 		await dispatch(updateWorkout(workout));
-		handleClose();
+		dispatch(closeForm(workout));
+	};
+
+	const handleClose = (e) => {
+		const workout = { id, title, load, reps };
+		dispatch(closeForm(workout));
 	};
 
 	return (
@@ -68,10 +74,12 @@ const WorkoutEditForm = ({ workoutId, handleClose }) => {
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
-			<button className="close-btn" onClick={handleClose}>
+			<button className="close-btn" type="button" onClick={handleClose}>
 				Close
 			</button>
-			<button className="update-btn">Update</button>
+			<button className="update-btn" type="submit">
+				Update
+			</button>
 			{error && <div className="error">{error}</div>}
 		</form>
 	);

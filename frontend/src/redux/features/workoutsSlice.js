@@ -7,6 +7,7 @@ const initialState = {
 	emptyFields: [],
 	status: "idle",
 	error: null,
+	editableWorkouts: [],
 };
 
 // async functions - thunks
@@ -74,7 +75,16 @@ export const updateWorkout = createAsyncThunk(
 const workoutsSlice = createSlice({
 	name: "workouts",
 	initialState,
-	reducers: {},
+	reducers: {
+		openForm: (state, action) => {
+			state.editableWorkouts.push(action.payload._id);
+		},
+		closeForm: (state, action) => {
+			state.editableWorkouts = state.editableWorkouts.filter((id) => {
+				return id !== action.payload.id;
+			});
+		},
+	},
 	extraReducers(builder) {
 		builder
 			.addCase(fetchWorkouts.pending, (state, action) => {
@@ -135,8 +145,13 @@ const workoutsSlice = createSlice({
 // default export
 export default workoutsSlice.reducer;
 
+// actions
+export const { openForm, closeForm } = workoutsSlice.actions;
+
 // selectors
 export const selectAllWorkouts = (state) => state.workouts.workouts;
 export const selectWorkoutStatus = (state) => state.workouts.status;
 export const selectWorkoutError = (state) => state.workouts.error;
 export const selectWorkoutFields = (state) => state.workouts.emptyFields;
+export const selectEditableWorkouts = (state) =>
+	state.workouts.editableWorkouts;

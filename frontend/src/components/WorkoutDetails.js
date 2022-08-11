@@ -1,6 +1,10 @@
-import { useDispatch } from "react-redux";
-import { deleteWorkout } from "../redux/features/workoutsSlice";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	openForm,
+	deleteWorkout,
+	selectEditableWorkouts,
+} from "../redux/features/workoutsSlice";
+import { useState, useEffect } from "react";
 
 // components
 import WorkoutEditForm from "./WorkoutEditForm";
@@ -12,21 +16,27 @@ const WorkoutDetails = ({ workout }) => {
 	const dispatch = useDispatch();
 
 	const [editable, setEditable] = useState(false);
+	const editableWorkouts = useSelector(selectEditableWorkouts);
+
+	useEffect(() => {
+		if (editableWorkouts.includes(workout._id)) {
+			setEditable(true);
+		} else {
+			setEditable(false);
+		}
+	}, [editableWorkouts, workout]);
 
 	const handleDelete = async () => {
 		dispatch(deleteWorkout(workout));
 	};
 
 	const handleEdit = async () => {
-		setEditable(true);
-	};
-
-	const handleClose = () => {
-		setEditable(false);
+		dispatch(openForm(workout));
 	};
 
 	return (
 		<li className="workout-details">
+			{workout._id}
 			<h4>{workout.title}</h4>
 			<p>
 				<strong>Load (kg): </strong>
@@ -49,19 +59,14 @@ const WorkoutDetails = ({ workout }) => {
 				})}
 			</p>
 			{!editable && (
-				<button className="edit-btn" onClick={handleEdit}>
+				<button className="edit-btn" type="submit" onClick={handleEdit}>
 					Edit
 				</button>
 			)}
 			<span className="material-symbols-outlined" onClick={handleDelete}>
 				delete
 			</span>
-			{editable && (
-				<WorkoutEditForm
-					workoutId={workout._id}
-					handleClose={handleClose}
-				/>
-			)}
+			{editable && <WorkoutEditForm workoutId={workout._id} />}
 		</li>
 	);
 };
