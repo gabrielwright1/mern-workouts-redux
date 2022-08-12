@@ -84,19 +84,16 @@ const workoutsSlice = createSlice({
 		},
 		closeForm: (state, action) => {
 			const { id } = action.payload;
-			let isErrored;
 
 			state.erroredWorkouts.forEach((errored) => {
 				if (errored.id === id) {
-					isErrored = true;
+					state.editableWorkouts = state.editableWorkouts.filter(
+						(id) => {
+							return id !== action.payload.id;
+						}
+					);
 				}
 			});
-
-			if (!isErrored) {
-				state.editableWorkouts = state.editableWorkouts.filter((id) => {
-					return id !== action.payload.id;
-				});
-			}
 		},
 	},
 	extraReducers(builder) {
@@ -141,25 +138,27 @@ const workoutsSlice = createSlice({
 				const { _id } = action.payload;
 				state.fetchStatus = "succeeded";
 
-				// add workout
+				// add to workouts
 				state.workouts = state.workouts.map((workout) =>
 					workout._id === _id ? action.payload : workout
 				);
 
-				// remove from editable
+				// remove from editableWorkouts
 				state.editableWorkouts = state.editableWorkouts.filter(
 					(workout) => workout !== _id
 				);
 
-				// remove from errored
+				// remove from erroredWorkouts
 				state.erroredWorkouts = state.erroredWorkouts.filter(
 					(workout) => workout.id !== _id
 				);
 			})
 			.addCase(updateWorkout.rejected, (state, action) => {
-				const { id, emptyFields, title, load, reps } = action.payload;
+				const { id, emptyFields, title, load, reps, error } =
+					action.payload;
 
 				let pendingFields = { title, load, reps };
+
 				if (!title) {
 					delete pendingFields.title;
 				}
@@ -170,7 +169,29 @@ const workoutsSlice = createSlice({
 					delete pendingFields.reps;
 				}
 
-				state.erroredWorkouts.push({ id, pendingFields, emptyFields });
+				// add to erroredWorkouts, unless it exists, then update
+				if (
+					state.erroredWorkouts.some((workout) => workout.id === id)
+				) {
+					state.erroredWorkouts = state.erroredWorkouts.map(
+						(workout) =>
+							workout.id === id
+								? {
+										id,
+										error,
+										pendingFields,
+										emptyFields,
+								  }
+								: workout
+					);
+				} else {
+					state.erroredWorkouts.push({
+						id,
+						error,
+						pendingFields,
+						emptyFields,
+					});
+				}
 			});
 	},
 });

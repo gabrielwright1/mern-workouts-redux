@@ -8,22 +8,12 @@ import WorkoutForm from "../components/WorkoutForm";
 // slices
 import {
 	selectAllWorkouts,
-	fetchWorkouts,
-	selectFetchStatus,
 	selectFetchError,
 } from "../redux/features/workoutsSlice";
 
 const Home = () => {
-	const dispatch = useDispatch();
 	const workouts = useSelector(selectAllWorkouts);
-	const fetchStatus = useSelector(selectFetchStatus);
 	const fetchError = useSelector(selectFetchError);
-
-	useEffect(() => {
-		if (fetchStatus === "idle") {
-			dispatch(fetchWorkouts());
-		}
-	}, [fetchStatus, dispatch]);
 
 	return (
 		<section className="workouts-list">

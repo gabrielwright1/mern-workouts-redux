@@ -23,24 +23,10 @@ const WorkoutEditForm = ({ workoutId }) => {
 		erroredWorkouts.forEach((workout) => {
 			if (workout.id === workoutId) {
 				setEmptyFields(workout.emptyFields);
-				setError("Please fill in all fields");
+				setError(workout.error);
 			}
 		});
 	}, [erroredWorkouts, workoutId]);
-
-	// useEffect(() => {
-	// 	if (workoutStatus === "failed") {
-	// 		setError(workoutError);
-	// 		setEmptyFields(workoutFields);
-	// 	}
-	// 	if (workoutStatus === "succeeded") {
-	// 		setEmptyFields([]);
-	// 		setError(null);
-	// 		setTitle("");
-	// 		setLoad("");
-	// 		setReps("");
-	// 	}
-	// }, [workoutStatus, workoutError, workoutFields]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();

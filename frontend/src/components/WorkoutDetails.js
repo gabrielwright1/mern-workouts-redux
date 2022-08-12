@@ -18,6 +18,7 @@ const WorkoutDetails = ({ workout }) => {
 	const dispatch = useDispatch();
 
 	const [editable, setEditable] = useState(false);
+
 	const editableWorkouts = useSelector(selectEditableWorkouts);
 
 	useEffect(() => {
