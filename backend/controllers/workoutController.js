@@ -75,9 +75,34 @@ const deleteWorkout = async (req, res) => {
 // update a workout
 const updateWorkout = async (req, res) => {
 	const { id } = req.params;
+	const { title, load, reps } = req.body;
+	let emptyFields = [];
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
 		return res.status(400).json({ error: "No such workout" });
+	}
+
+	// validate form inputs
+	if (!title) {
+		emptyFields.push("title");
+	}
+	if (!load) {
+		emptyFields.push("load");
+	}
+	if (!reps) {
+		emptyFields.push("reps");
+	}
+	if (emptyFields.length > 0) {
+		return res
+			.status(400)
+			.json({
+				error: "Please fill in all fields",
+				emptyFields,
+				id,
+				title,
+				load,
+				reps,
+			});
 	}
 
 	const workout = await Workout.findOneAndUpdate(

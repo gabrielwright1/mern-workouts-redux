@@ -9,24 +9,27 @@ import WorkoutForm from "../components/WorkoutForm";
 import {
 	selectAllWorkouts,
 	fetchWorkouts,
-	selectWorkoutStatus,
+	selectFetchStatus,
+	selectFetchError,
 } from "../redux/features/workoutsSlice";
 
 const Home = () => {
 	const dispatch = useDispatch();
 	const workouts = useSelector(selectAllWorkouts);
-	const workoutStatus = useSelector(selectWorkoutStatus);
+	const fetchStatus = useSelector(selectFetchStatus);
+	const fetchError = useSelector(selectFetchError);
 
 	useEffect(() => {
-		if (workoutStatus === "idle") {
+		if (fetchStatus === "idle") {
 			dispatch(fetchWorkouts());
 		}
-	}, [workoutStatus, dispatch]);
+	}, [fetchStatus, dispatch]);
 
 	return (
 		<section className="workouts-list">
 			<WorkoutForm />
 			<h2>Workouts</h2>
+			{fetchError && <p className="fetchError">Error: {fetchError}</p>}
 			<ul>
 				{workouts.map((workout) => (
 					<WorkoutDetails key={workout._id} workout={workout} />

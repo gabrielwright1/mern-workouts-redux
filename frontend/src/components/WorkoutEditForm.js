@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	closeForm,
 	updateWorkout,
-	selectWorkoutStatus,
-	selectWorkoutError,
-	selectWorkoutFields,
+	selectErroredWorkouts,
 } from "../redux/features/workoutsSlice";
 
 const WorkoutEditForm = ({ workoutId }) => {
@@ -19,29 +17,35 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const [error, setError] = useState(null);
 	const [emptyFields, setEmptyFields] = useState([]);
 
-	const workoutStatus = useSelector(selectWorkoutStatus);
-	const workoutError = useSelector(selectWorkoutError);
-	const workoutFields = useSelector(selectWorkoutFields);
+	const erroredWorkouts = useSelector(selectErroredWorkouts);
 
 	useEffect(() => {
-		if (workoutStatus === "failed") {
-			setError(workoutError);
-			setEmptyFields(workoutFields);
-		}
-		if (workoutStatus === "succeeded") {
-			setEmptyFields([]);
-			setError(null);
-			setTitle("");
-			setLoad("");
-			setReps("");
-		}
-	}, [workoutStatus, workoutError, workoutFields]);
+		erroredWorkouts.forEach((workout) => {
+			if (workout.id === workoutId) {
+				setEmptyFields(workout.emptyFields);
+				setError("Please fill in all fields");
+			}
+		});
+	}, [erroredWorkouts, workoutId]);
+
+	// useEffect(() => {
+	// 	if (workoutStatus === "failed") {
+	// 		setError(workoutError);
+	// 		setEmptyFields(workoutFields);
+	// 	}
+	// 	if (workoutStatus === "succeeded") {
+	// 		setEmptyFields([]);
+	// 		setError(null);
+	// 		setTitle("");
+	// 		setLoad("");
+	// 		setReps("");
+	// 	}
+	// }, [workoutStatus, workoutError, workoutFields]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const workout = { id, title, load, reps };
-		await dispatch(updateWorkout(workout));
-		dispatch(closeForm(workout));
+		dispatch(updateWorkout(workout));
 	};
 
 	const handleClose = (e) => {

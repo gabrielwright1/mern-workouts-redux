@@ -4,10 +4,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // initial state
 const initialState = {
 	workouts: [],
-	emptyFields: [],
-	status: "idle",
-	error: null,
+	fetchStatus: "idle",
+	fetchError: null,
+	createFormStatus: "idle",
+	createFormError: null,
+	createFormEmptyFields: [],
 	editableWorkouts: [],
+	erroredWorkouts: [],
 };
 
 // async functions - thunks
@@ -80,64 +83,94 @@ const workoutsSlice = createSlice({
 			state.editableWorkouts.push(action.payload._id);
 		},
 		closeForm: (state, action) => {
-			state.editableWorkouts = state.editableWorkouts.filter((id) => {
-				return id !== action.payload.id;
+			const { id } = action.payload;
+			let isErrored;
+
+			state.erroredWorkouts.forEach((errored) => {
+				if (errored.id === id) {
+					isErrored = true;
+				}
 			});
+
+			if (!isErrored) {
+				state.editableWorkouts = state.editableWorkouts.filter((id) => {
+					return id !== action.payload.id;
+				});
+			}
 		},
 	},
 	extraReducers(builder) {
 		builder
 			.addCase(fetchWorkouts.pending, (state, action) => {
-				state.status = "loading";
+				state.fetchStatus = "loading";
 			})
 			.addCase(fetchWorkouts.fulfilled, (state, action) => {
-				state.status = "succeeded";
+				state.fetchStatus = "succeeded";
 				state.workouts = state.workouts.concat(action.payload);
 			})
 			.addCase(fetchWorkouts.rejected, (state, action) => {
-				state.status = "failed";
+				state.fetchStatus = "failed";
 				state.error = action.error.message;
 			})
 			.addCase(deleteWorkout.pending, (state, action) => {
-				state.status = "loading";
+				state.fetchStatus = "loading";
 			})
 			.addCase(deleteWorkout.fulfilled, (state, action) => {
-				state.status = "succeeded";
+				state.fetchStatus = "succeeded";
 				state.workouts = state.workouts.filter((workout) => {
 					return workout._id !== action.payload._id;
 				});
 			})
 			.addCase(deleteWorkout.rejected, (state, action) => {
-				state.status = "failed";
+				state.fetchStatus = "failed";
 				state.error = action.error.message;
 			})
 			.addCase(createWorkout.pending, (state, action) => {
-				state.status = "loading";
+				state.createFormStatus = "loading";
 			})
 			.addCase(createWorkout.fulfilled, (state, action) => {
-				state.status = "succeeded";
+				state.createFormStatus = "succeeded";
 				state.workouts = [action.payload, ...state.workouts];
 			})
 			.addCase(createWorkout.rejected, (state, action) => {
-				state.status = "failed";
-				state.error = action.error.message;
-				state.emptyFields = action.payload.emptyFields;
-			})
-			.addCase(updateWorkout.pending, (state, action) => {
-				state.status = "loading";
+				state.createFormStatus = "failed";
+				state.createFormEmptyFields = action.payload.emptyFields;
+				state.createFormError = action.payload.error;
 			})
 			.addCase(updateWorkout.fulfilled, (state, action) => {
-				state.status = "succeeded";
+				const { _id } = action.payload;
+				state.fetchStatus = "succeeded";
+
+				// add workout
 				state.workouts = state.workouts.map((workout) =>
-					workout._id === action.payload._id
-						? action.payload
-						: workout
+					workout._id === _id ? action.payload : workout
+				);
+
+				// remove from editable
+				state.editableWorkouts = state.editableWorkouts.filter(
+					(workout) => workout !== _id
+				);
+
+				// remove from errored
+				state.erroredWorkouts = state.erroredWorkouts.filter(
+					(workout) => workout.id !== _id
 				);
 			})
 			.addCase(updateWorkout.rejected, (state, action) => {
-				state.status = "failed";
-				state.error = action.error.message;
-				state.emptyFields = action.payload.emptyFields;
+				const { id, emptyFields, title, load, reps } = action.payload;
+
+				let pendingFields = { title, load, reps };
+				if (!title) {
+					delete pendingFields.title;
+				}
+				if (!load) {
+					delete pendingFields.load;
+				}
+				if (!reps) {
+					delete pendingFields.reps;
+				}
+
+				state.erroredWorkouts.push({ id, pendingFields, emptyFields });
 			});
 	},
 });
@@ -148,10 +181,19 @@ export default workoutsSlice.reducer;
 // actions
 export const { openForm, closeForm } = workoutsSlice.actions;
 
-// selectors
+// fetch selectors
 export const selectAllWorkouts = (state) => state.workouts.workouts;
-export const selectWorkoutStatus = (state) => state.workouts.status;
-export const selectWorkoutError = (state) => state.workouts.error;
-export const selectWorkoutFields = (state) => state.workouts.emptyFields;
+export const selectFetchStatus = (state) => state.workouts.fetchStatus;
+export const selectFetchError = (state) => state.workouts.fetchError;
+
+// create form selectors
+export const selectCreateFormEmptyFields = (state) =>
+	state.workouts.createFormEmptyFields;
+export const selectCreateFormError = (state) => state.workouts.createFormError;
+export const selectCreateFormStatus = (state) =>
+	state.workouts.createFormStatus;
+
+// edit form selectors
 export const selectEditableWorkouts = (state) =>
 	state.workouts.editableWorkouts;
+export const selectErroredWorkouts = (state) => state.workouts.erroredWorkouts;

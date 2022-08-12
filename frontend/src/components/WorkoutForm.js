@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
 	createWorkout,
-	selectWorkoutStatus,
-	selectWorkoutError,
-	selectWorkoutFields,
+	selectCreateFormEmptyFields,
+	selectCreateFormError,
+	selectCreateFormStatus,
 } from "../redux/features/workoutsSlice";
 
 const WorkoutForm = () => {
@@ -17,9 +17,9 @@ const WorkoutForm = () => {
 	const [error, setError] = useState(null);
 	const [emptyFields, setEmptyFields] = useState([]);
 
-	const workoutStatus = useSelector(selectWorkoutStatus);
-	const workoutError = useSelector(selectWorkoutError);
-	const workoutFields = useSelector(selectWorkoutFields);
+	const createFormEmptyFields = useSelector(selectCreateFormEmptyFields);
+	const createFormStatus = useSelector(selectCreateFormStatus);
+	const createFormError = useSelector(selectCreateFormError);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -28,18 +28,18 @@ const WorkoutForm = () => {
 	};
 
 	useEffect(() => {
-		if (workoutStatus === "failed") {
-			setError(workoutError);
-			setEmptyFields(workoutFields);
+		if (createFormStatus === "failed") {
+			setEmptyFields(createFormEmptyFields);
+			setError(createFormError);
 		}
-		if (workoutStatus === "succeeded") {
+		if (createFormStatus === "succeeded") {
 			setEmptyFields([]);
 			setError(null);
 			setTitle("");
 			setLoad("");
 			setReps("");
 		}
-	}, [workoutStatus, workoutError, workoutFields]);
+	}, [createFormStatus, createFormError, createFormEmptyFields]);
 
 	return (
 		<form className="create" onSubmit={handleSubmit}>

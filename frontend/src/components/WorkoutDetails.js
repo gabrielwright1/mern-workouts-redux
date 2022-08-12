@@ -1,10 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+
+// slices
 import {
 	openForm,
 	deleteWorkout,
 	selectEditableWorkouts,
 } from "../redux/features/workoutsSlice";
-import { useState, useEffect } from "react";
 
 // components
 import WorkoutEditForm from "./WorkoutEditForm";
