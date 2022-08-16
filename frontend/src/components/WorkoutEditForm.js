@@ -10,7 +10,7 @@ import {
 const WorkoutEditForm = ({ workoutId }) => {
 	const dispatch = useDispatch();
 
-	const [id, setId] = useState(workoutId);
+	const [id, setId] = useState("");
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
@@ -20,6 +20,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const erroredWorkouts = useSelector(selectErroredWorkouts);
 
 	useEffect(() => {
+		setId(workoutId);
 		erroredWorkouts.forEach((workout) => {
 			if (workout.id === workoutId) {
 				setEmptyFields(workout.emptyFields);
@@ -31,7 +32,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const workout = { id, title, load, reps };
-		dispatch(updateWorkout(workout));
+		await dispatch(updateWorkout(workout));
 	};
 
 	const handleClose = (e) => {

@@ -9,6 +9,7 @@ const initialState = {
 	createFormStatus: "idle",
 	createFormError: null,
 	createFormEmptyFields: [],
+	updateWorkoutStatus: "idle",
 	editableWorkouts: [],
 	erroredWorkouts: [],
 };
@@ -90,6 +91,9 @@ const workoutsSlice = createSlice({
 					return editableId !== id;
 				}
 			);
+			state.erroredWorkouts = state.erroredWorkouts.filter((errored) => {
+				return errored.id !== id;
+			});
 		},
 	},
 	extraReducers(builder) {
@@ -120,6 +124,10 @@ const workoutsSlice = createSlice({
 			})
 			.addCase(createWorkout.pending, (state, action) => {
 				state.createFormStatus = "loading";
+
+				// clear error when pending
+				state.createFormError = null;
+				state.createFormEmptyFields = [];
 			})
 			.addCase(createWorkout.fulfilled, (state, action) => {
 				state.createFormStatus = "succeeded";
@@ -130,9 +138,13 @@ const workoutsSlice = createSlice({
 				state.createFormEmptyFields = action.payload.emptyFields;
 				state.createFormError = action.payload.error;
 			})
+			.addCase(updateWorkout.pending, (state, action) => {
+				state.updateWorkoutStatus = "loading";
+			})
 			.addCase(updateWorkout.fulfilled, (state, action) => {
+				state.updateWorkoutStatus = "succeeded";
+
 				const { _id } = action.payload;
-				state.fetchStatus = "succeeded";
 
 				// add to workouts
 				state.workouts = state.workouts.map((workout) =>
@@ -150,6 +162,8 @@ const workoutsSlice = createSlice({
 				);
 			})
 			.addCase(updateWorkout.rejected, (state, action) => {
+				state.updateWorkoutStatus = "failed";
+
 				const { id, emptyFields, title, load, reps, error } =
 					action.payload;
 
@@ -165,7 +179,7 @@ const workoutsSlice = createSlice({
 					delete pendingFields.reps;
 				}
 
-				// add to erroredWorkouts, unless it exists, then update
+				// if it exists then update it, otherwise add it
 				if (
 					state.erroredWorkouts.some((workout) => workout.id === id)
 				) {
