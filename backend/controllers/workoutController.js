@@ -1,14 +1,18 @@
 const Workout = require("../models/workoutModel");
 const mongoose = require("mongoose");
 
-// get all workouts
+// @desc      Get workouts
+// @route     GET /api/workouts
+// @access    Private
 const getWorkouts = async (req, res) => {
 	const workouts = await Workout.find({}).sort({ createdAt: -1 });
 
 	res.status(200).json(workouts);
 };
 
-// get a single workout
+// @desc      Get a workout
+// @route     GET /api/workouts/:id
+// @access    Private
 const getWorkout = async (req, res) => {
 	const { id } = req.params;
 
@@ -25,7 +29,9 @@ const getWorkout = async (req, res) => {
 	res.status(200).json(workout);
 };
 
-// create a new workout
+// @desc      Create a new workout
+// @route     POST /api/workouts/
+// @access    Private
 const createWorkout = async (req, res) => {
 	const { title, load, reps } = req.body;
 
@@ -55,7 +61,9 @@ const createWorkout = async (req, res) => {
 	}
 };
 
-// delete a workout
+// @desc      Delete a workout
+// @route     DELETE /api/workouts/:id
+// @access    Private
 const deleteWorkout = async (req, res) => {
 	const { id } = req.params;
 
@@ -72,7 +80,9 @@ const deleteWorkout = async (req, res) => {
 	res.status(200).json(workout);
 };
 
-// update a workout
+// @desc      Update a workout
+// @route     PATCH /api/workouts/:id
+// @access    Private
 const updateWorkout = async (req, res) => {
 	const { id } = req.params;
 	const { title, load, reps } = req.body;
@@ -93,16 +103,14 @@ const updateWorkout = async (req, res) => {
 		emptyFields.push("reps");
 	}
 	if (emptyFields.length > 0) {
-		return res
-			.status(400)
-			.json({
-				error: "Please fill in all fields",
-				emptyFields,
-				id,
-				title,
-				load,
-				reps,
-			});
+		return res.status(400).json({
+			error: "Please fill in all fields",
+			emptyFields,
+			id,
+			title,
+			load,
+			reps,
+		});
 	}
 
 	const workout = await Workout.findOneAndUpdate(

@@ -1,5 +1,6 @@
 const express = require("express");
-const workoutRoutes = require("./routes/workouts");
+const workoutRoutes = require("./routes/workoutRoutes");
+const userRoutes = require("./routes/userRoutes");
 const setupDbConnection = require("./utility/setupDb");
 
 // express app
@@ -15,6 +16,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use("/api/workouts", workoutRoutes);
+app.use("/api/user", userRoutes);
 
 // connect to db
 setupDbConnection(app);
