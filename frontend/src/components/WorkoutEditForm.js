@@ -35,7 +35,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	};
 
 	const handleClose = (e) => {
-		const workout = { id, title, load, reps };
+		const workout = { id };
 		dispatch(closeForm(workout));
 	};
 

@@ -85,15 +85,11 @@ const workoutsSlice = createSlice({
 		closeForm: (state, action) => {
 			const { id } = action.payload;
 
-			state.erroredWorkouts.forEach((errored) => {
-				if (errored.id === id) {
-					state.editableWorkouts = state.editableWorkouts.filter(
-						(id) => {
-							return id !== action.payload.id;
-						}
-					);
+			state.editableWorkouts = state.editableWorkouts.filter(
+				(editableId) => {
+					return editableId !== id;
 				}
-			});
+			);
 		},
 	},
 	extraReducers(builder) {
