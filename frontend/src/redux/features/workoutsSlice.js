@@ -6,6 +6,8 @@ const initialState = {
 	workouts: [],
 	fetchStatus: "idle",
 	fetchError: null,
+	deleteStatus: "idle",
+	deleteError: null,
 	createFormStatus: "idle",
 	createFormError: null,
 	createFormEmptyFields: [],
@@ -17,9 +19,18 @@ const initialState = {
 // async functions - thunks
 export const fetchWorkouts = createAsyncThunk(
 	"workouts/fetchWorkouts",
-	async () => {
-		const response = await fetch("/api/workouts");
-		return response.json();
+	async (user, { rejectWithValue }) => {
+		const response = await fetch("/api/workouts", {
+			headers: { Authorization: `Bearer ${user.token}` },
+		});
+		const json = await response.json();
+
+		if (!response.ok) {
+			return rejectWithValue(json);
+		}
+		if (response.ok) {
+			return json;
+		}
 	}
 );
 
@@ -107,20 +118,20 @@ const workoutsSlice = createSlice({
 			})
 			.addCase(fetchWorkouts.rejected, (state, action) => {
 				state.fetchStatus = "failed";
-				state.error = action.error.message;
+				state.fetchError = action.error.message;
 			})
 			.addCase(deleteWorkout.pending, (state, action) => {
-				state.fetchStatus = "loading";
+				state.deleteStatus = "loading";
 			})
 			.addCase(deleteWorkout.fulfilled, (state, action) => {
-				state.fetchStatus = "succeeded";
+				state.deleteStatus = "succeeded";
 				state.workouts = state.workouts.filter((workout) => {
 					return workout._id !== action.payload._id;
 				});
 			})
 			.addCase(deleteWorkout.rejected, (state, action) => {
-				state.fetchStatus = "failed";
-				state.error = action.error.message;
+				state.deleteStatus = "failed";
+				state.deleteError = action.error.message;
 			})
 			.addCase(createWorkout.pending, (state, action) => {
 				state.createFormStatus = "loading";

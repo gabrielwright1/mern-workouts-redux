@@ -9,11 +9,22 @@ import WorkoutForm from "../components/WorkoutForm";
 import {
 	selectAllWorkouts,
 	selectFetchError,
+	fetchWorkouts,
 } from "../redux/features/workoutsSlice";
+import { selectUser } from "../redux/features/userSlice";
 
 const Home = () => {
+	const dispatch = useDispatch();
+
 	const workouts = useSelector(selectAllWorkouts);
 	const fetchError = useSelector(selectFetchError);
+	const user = useSelector(selectUser);
+
+	useEffect(() => {
+		if (user) {
+			dispatch(fetchWorkouts(user));
+		}
+	}, [dispatch, user]);
 
 	return (
 		<section className="workouts-list">

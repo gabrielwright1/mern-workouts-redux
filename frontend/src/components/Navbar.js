@@ -1,16 +1,38 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
+import { setLogout, selectUser } from "../redux/features/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 const Navbar = () => {
+	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
 
-  return (
-    <header>
-      <div className="container">
-        <Link to="/">
-          <h1>Workout Buddy</h1>
-        </Link>
-      </div>
-    </header>
-  )
-}
+	const handleClick = async () => {
+		await dispatch(setLogout());
+	};
 
-export default Navbar
+	return (
+		<header>
+			<div className="container">
+				<Link to="/">
+					<h1>Workout Buddy</h1>
+				</Link>
+				<nav>
+					{user && (
+						<div>
+							<span>{user.email}</span>
+							<button onClick={handleClick}>Log out</button>
+						</div>
+					)}
+					{!user && (
+						<div>
+							<Link to="/login">Login</Link>
+							<Link to="/signup">Signup</Link>
+						</div>
+					)}
+				</nav>
+			</div>
+		</header>
+	);
+};
+
+export default Navbar;
