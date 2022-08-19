@@ -109,6 +109,19 @@ const workoutsSlice = createSlice({
 				return errored.id !== id;
 			});
 		},
+		resetForms: (state, action) => {
+			state.workouts = [];
+			state.fetchStatus = "idle";
+			state.fetchError = null;
+			state.deleteStatus = "idle";
+			state.deleteError = null;
+			state.createFormStatus = "idle";
+			state.createFormError = null;
+			state.createFormEmptyFields = [];
+			state.updateWorkoutStatus = "idle";
+			state.editableWorkouts = [];
+			state.erroredWorkouts = [];
+		},
 	},
 	extraReducers(builder) {
 		builder
@@ -224,7 +237,7 @@ const workoutsSlice = createSlice({
 export default workoutsSlice.reducer;
 
 // actions
-export const { openForm, closeForm } = workoutsSlice.actions;
+export const { openForm, closeForm, resetForms } = workoutsSlice.actions;
 
 // fetch selectors
 export const selectAllWorkouts = (state) => state.workouts.workouts;

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { setLogout, selectUser } from "../redux/features/userSlice";
+import { logoutUser, selectUser } from "../redux/features/userSlice";
+import { resetForms } from "../redux/features/workoutsSlice";
 import { useSelector, useDispatch } from "react-redux";
 
 const Navbar = () => {
@@ -7,7 +8,8 @@ const Navbar = () => {
 	const user = useSelector(selectUser);
 
 	const handleClick = async () => {
-		dispatch(setLogout());
+		dispatch(logoutUser());
+		dispatch(resetForms());
 	};
 
 	return (

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	signup,
+	signupUser,
 	selectSignupError,
 	selectSignupStatus,
 } from "../redux/features/userSlice";
@@ -25,7 +25,7 @@ const Signup = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		dispatch(signup({ email, password }));
+		dispatch(signupUser({ email, password }));
 	};
 
 	return (

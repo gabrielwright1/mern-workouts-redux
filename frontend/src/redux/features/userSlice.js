@@ -11,7 +11,7 @@ const initialState = {
 	signupError: null,
 };
 
-export const login = createAsyncThunk(
+export const loginUser = createAsyncThunk(
 	"users/login",
 	async ({ email, password }, { rejectWithValue }) => {
 		const response = await fetch("/api/user/login", {
@@ -31,7 +31,7 @@ export const login = createAsyncThunk(
 		}
 	}
 );
-export const signup = createAsyncThunk(
+export const signupUser = createAsyncThunk(
 	"users/signup",
 	async ({ email, password }, { rejectWithValue }) => {
 		const response = await fetch("/api/user/signup", {
@@ -55,37 +55,42 @@ const userSlice = createSlice({
 	name: "users",
 	initialState,
 	reducers: {
-		setLogout: (state, action) => {
+		logoutUser: (state, action) => {
 			localStorage.removeItem("user");
+
 			state.user = null;
+			state.loginStatus = "idle";
+			state.loginError = null;
+			state.signupStatus = "idle";
+			state.signupError = null;
 		},
 	},
 	extraReducers(builder) {
 		builder
-			.addCase(login.pending, (state, action) => {
+			.addCase(loginUser.pending, (state, action) => {
 				state.loginStatus = "loading";
 				state.loginError = null;
 			})
-			.addCase(login.fulfilled, (state, action) => {
+			.addCase(loginUser.fulfilled, (state, action) => {
 				state.loginStatus = "succeeded";
 				state.loginError = null;
 				state.user = action.payload;
 			})
-			.addCase(login.rejected, (state, action) => {
+			.addCase(loginUser.rejected, (state, action) => {
 				state.loginStatus = "failed";
 				console.log(action.error);
 				state.loginError = action.payload.error;
 			})
-			.addCase(signup.pending, (state, action) => {
+			.addCase(signupUser.pending, (state, action) => {
 				state.signupStatus = "loading";
 				state.signupError = null;
 			})
-			.addCase(signup.fulfilled, (state, action) => {
+			.addCase(signupUser.fulfilled, (state, action) => {
 				state.signupStatus = "succeeded";
 				state.signupError = null;
 				state.user = action.payload;
 			})
-			.addCase(signup.rejected, (state, action) => {
+			.addCase(signupUser.rejected, (state, action) => {
 				state.signupStatus = "failed";
 				state.signupError = action.payload.error;
 			});
@@ -102,4 +107,4 @@ export const selectSignupError = (state) => state.users.signupError;
 export const selectSignupStatus = (state) => state.users.signupStatus;
 
 // actions
-export const { setLogout } = userSlice.actions;
+export const { logoutUser } = userSlice.actions;

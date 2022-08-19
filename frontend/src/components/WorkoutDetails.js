@@ -41,7 +41,6 @@ const WorkoutDetails = ({ workout }) => {
 
 	return (
 		<li className="workout-details">
-			{workout._id}
 			<h4>{workout.title}</h4>
 			<p>
 				<strong>Load (kg): </strong>
