@@ -114,7 +114,7 @@ const workoutsSlice = createSlice({
 			})
 			.addCase(fetchWorkouts.fulfilled, (state, action) => {
 				state.fetchStatus = "succeeded";
-				state.workouts = state.workouts.concat(action.payload);
+				state.workouts = action.payload;
 			})
 			.addCase(fetchWorkouts.rejected, (state, action) => {
 				state.fetchStatus = "failed";

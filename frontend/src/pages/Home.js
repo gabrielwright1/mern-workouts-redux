@@ -24,7 +24,7 @@ const Home = () => {
 		if (user) {
 			dispatch(fetchWorkouts(user));
 		}
-	}, [dispatch, user]);
+	}, [user, dispatch]);
 
 	return (
 		<section className="workouts-list">

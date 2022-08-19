@@ -18,7 +18,7 @@ const Signup = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		dispatch(signup({ email, password }));
+		await dispatch(signup({ email, password }));
 	};
 
 	useEffect(() => {

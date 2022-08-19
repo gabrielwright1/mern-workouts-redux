@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+// get user from local storage
+const user = JSON.parse(localStorage.getItem("user"));
+
 const initialState = {
-	user: null,
+	user: user ? user : null,
 	loginStatus: "idle",
 	loginError: null,
 	signupStatus: "idle",
@@ -52,9 +55,6 @@ const userSlice = createSlice({
 	name: "users",
 	initialState,
 	reducers: {
-		setUser: (state, action) => {
-			state.user = action.payload;
-		},
 		setLogout: (state, action) => {
 			localStorage.removeItem("user");
 			state.user = null;
@@ -102,4 +102,4 @@ export const selectSignupError = (state) => state.users.signupError;
 export const selectSignupStatus = (state) => state.users.signupStatus;
 
 // actions
-export const { setUser, setLogout } = userSlice.actions;
+export const { setLogout } = userSlice.actions;
