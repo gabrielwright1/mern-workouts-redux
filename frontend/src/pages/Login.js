@@ -15,12 +15,6 @@ const Login = () => {
 	const loginStatus = useSelector(selectLoginStatus);
 	const loginError = useSelector(selectLoginError);
 
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-
-		await dispatch(login({ email, password }));
-	};
-
 	useEffect(() => {
 		if (loginStatus === "loading") {
 			setIsLoading(true);
@@ -28,6 +22,12 @@ const Login = () => {
 			setIsLoading(false);
 		}
 	}, [loginStatus]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		await dispatch(login({ email, password }));
+	};
 
 	return (
 		<form className="login" onSubmit={handleSubmit}>

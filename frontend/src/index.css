@@ -120,3 +120,8 @@ div.error {
 input.error {
 	border: 1px solid var(--error);
 }
+
+nav a,
+span {
+	padding: 0 5px;
+}

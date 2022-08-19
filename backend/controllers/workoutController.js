@@ -35,6 +35,8 @@ const getWorkout = async (req, res) => {
 // @route     POST /api/workouts/
 // @access    Private
 const createWorkout = async (req, res) => {
+	const user_id = req.user._id;
+
 	const { title, load, reps } = req.body;
 
 	let emptyFields = [];
@@ -54,9 +56,8 @@ const createWorkout = async (req, res) => {
 			.json({ error: "Please fill in all fields", emptyFields });
 	}
 
-	// add to the database
 	try {
-		const workout = await Workout.create({ title, load, reps });
+		const workout = await Workout.create({ title, load, reps, user_id });
 		res.status(200).json(workout);
 	} catch (error) {
 		res.status(400).json({ error: error.message });

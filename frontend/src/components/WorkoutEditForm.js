@@ -6,6 +6,7 @@ import {
 	updateWorkout,
 	selectErroredWorkouts,
 } from "../redux/features/workoutsSlice";
+import { selectUser } from "../redux/features/userSlice";
 
 const WorkoutEditForm = ({ workoutId }) => {
 	const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const [emptyFields, setEmptyFields] = useState([]);
 
 	const erroredWorkouts = useSelector(selectErroredWorkouts);
+	const user = useSelector(selectUser);
 
 	useEffect(() => {
 		setId(workoutId);
@@ -32,7 +34,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const workout = { id, title, load, reps };
-		await dispatch(updateWorkout(workout));
+		dispatch(updateWorkout({ workout, user }));
 	};
 
 	const handleClose = (e) => {

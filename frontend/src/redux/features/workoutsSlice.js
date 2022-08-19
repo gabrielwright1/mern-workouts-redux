@@ -36,9 +36,10 @@ export const fetchWorkouts = createAsyncThunk(
 
 export const deleteWorkout = createAsyncThunk(
 	"workouts/deleteWorkout",
-	async (workout) => {
+	async ({ workout, user }) => {
 		const response = await fetch(`/api/workouts/${workout._id}`, {
 			method: "DELETE",
+			headers: { Authorization: `Bearer ${user.token}` },
 		});
 		return response.json();
 	}
@@ -46,12 +47,13 @@ export const deleteWorkout = createAsyncThunk(
 
 export const createWorkout = createAsyncThunk(
 	"workouts/createWorkout",
-	async (workout, { rejectWithValue }) => {
+	async ({ workout, user }, { rejectWithValue }) => {
 		const response = await fetch("/api/workouts", {
 			method: "POST",
 			body: JSON.stringify(workout),
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${user.token}`,
 			},
 		});
 		const json = await response.json();
@@ -67,12 +69,13 @@ export const createWorkout = createAsyncThunk(
 
 export const updateWorkout = createAsyncThunk(
 	"workouts/updateWorkout",
-	async (workout, { rejectWithValue }) => {
+	async ({ workout, user }, { rejectWithValue }) => {
 		const response = await fetch(`/api/workouts/${workout.id}`, {
 			method: "PATCH",
 			body: JSON.stringify(workout),
 			headers: {
 				"Content-Type": "application/json",
+				Authorization: `Bearer ${user.token}`,
 			},
 		});
 		const json = await response.json();

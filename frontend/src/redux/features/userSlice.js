@@ -74,7 +74,7 @@ const userSlice = createSlice({
 			.addCase(login.rejected, (state, action) => {
 				state.loginStatus = "failed";
 				console.log(action.error);
-				state.loginError = action.error.message;
+				state.loginError = action.payload.error;
 			})
 			.addCase(signup.pending, (state, action) => {
 				state.signupStatus = "loading";
@@ -87,7 +87,7 @@ const userSlice = createSlice({
 			})
 			.addCase(signup.rejected, (state, action) => {
 				state.signupStatus = "failed";
-				state.signupError = action.error.message;
+				state.signupError = action.payload.error;
 			});
 	},
 });

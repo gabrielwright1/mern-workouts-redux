@@ -7,7 +7,7 @@ const Navbar = () => {
 	const user = useSelector(selectUser);
 
 	const handleClick = async () => {
-		await dispatch(setLogout());
+		dispatch(setLogout());
 	};
 
 	return (

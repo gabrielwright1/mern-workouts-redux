@@ -13,6 +13,7 @@ import WorkoutEditForm from "./WorkoutEditForm";
 
 // date fns
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { selectUser } from "../redux/features/userSlice";
 
 const WorkoutDetails = ({ workout }) => {
 	const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const WorkoutDetails = ({ workout }) => {
 	const [editable, setEditable] = useState(false);
 
 	const editableWorkouts = useSelector(selectEditableWorkouts);
+	const user = useSelector(selectUser);
 
 	useEffect(() => {
 		if (editableWorkouts.includes(workout._id)) {
@@ -30,7 +32,7 @@ const WorkoutDetails = ({ workout }) => {
 	}, [editableWorkouts, workout]);
 
 	const handleDelete = async () => {
-		dispatch(deleteWorkout(workout));
+		dispatch(deleteWorkout({ workout, user }));
 	};
 
 	const handleEdit = async () => {
