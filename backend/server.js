@@ -19,7 +19,7 @@ app.use((req, res, next) => {
 app.use("/api/workouts", workoutRoutes);
 app.use("/api/user", userRoutes);
 
-// server frontend
+// serve frontend
 if (process.env.NODE_ENV === "production") {
 	app.use(express.static(path.join(__dirname, "../frontend/build")));
 	app.get("*", (req, res) =>

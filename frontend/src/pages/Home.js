@@ -29,7 +29,7 @@ const Home = () => {
 	return (
 		<section className="workouts-list">
 			<WorkoutForm />
-			<h2>Workouts</h2>
+			<h2>Saved Workouts</h2>
 			{fetchError && <p className="fetchError">Error: {fetchError}</p>}
 			<ul>
 				{workouts.map((workout) => (

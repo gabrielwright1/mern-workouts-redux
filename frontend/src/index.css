@@ -3,7 +3,7 @@
 
 /* layout */
 :root {
-	--primary: #1aac83;
+	--primary: purple;
 	--error: #e7195a;
 }
 
@@ -26,6 +26,12 @@ header .container {
 header a {
 	color: #333;
 	text-decoration: none;
+}
+h1 {
+	font-size: 30px;
+}
+h2 {
+	font-size: 20px;
 }
 .pages {
 	max-width: 1400px;
@@ -83,6 +89,12 @@ header a {
 	list-style-type: none;
 	padding: 0;
 }
+.user-options span,
+.user-options a {
+	text-decoration: underline;
+	cursor: pointer;
+	color: var(--primary);
+}
 
 /* new workout form */
 label,
@@ -124,4 +136,16 @@ input.error {
 nav a,
 span {
 	padding: 0 5px;
+}
+
+/* Landscape phones and down */
+@media (max-width: 600px) {
+	header .container {
+		flex-direction: column;
+		position: relative;
+	}
+
+	h2 {
+		text-align: center;
+	}
 }
