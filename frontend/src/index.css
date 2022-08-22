@@ -16,7 +16,7 @@ header {
 	background: #fff;
 }
 header .container {
-	max-width: 1400px;
+	max-width: 960px;
 	margin: 0 auto;
 	padding: 10px 20px;
 	display: flex;
@@ -34,7 +34,7 @@ h2 {
 	font-size: 20px;
 }
 .pages {
-	max-width: 1400px;
+	max-width: 960px;
 	padding: 20px;
 	margin: 0 auto;
 }
