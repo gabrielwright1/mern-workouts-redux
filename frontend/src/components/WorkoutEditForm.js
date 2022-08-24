@@ -45,32 +45,36 @@ const WorkoutEditForm = ({ workoutId }) => {
 
 	return (
 		<form className="edit" onSubmit={handleSubmit}>
-			<label>Exercise Title:</label>
+			<label htmlFor="edit-workout-title">Exercise Title:</label>
 			<input
+				id="edit-workout-title"
 				type="text"
 				onChange={(e) => setTitle(e.target.value)}
 				value={title}
 				className={emptyFields.includes("title") ? "error" : ""}
 			/>
 
-			<label>Load (in kg):</label>
+			<label htmlFor="edit-workout-load">Load (in kg):</label>
 			<input
+				id="edit-workout-load"
 				type="number"
 				onChange={(e) => setLoad(e.target.value)}
 				value={load}
 				className={emptyFields.includes("load") ? "error" : ""}
 			/>
 
-			<label>Number of Reps:</label>
+			<label htmlFor="edit-workout-reps">Number of Reps:</label>
 			<input
+				id="edit-workout-reps"
 				type="number"
 				onChange={(e) => setReps(e.target.value)}
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
 
-			<label>Number of Sets:</label>
+			<label htmlFor="edit-workout-sets">Number of Sets:</label>
 			<input
+				id="edit-workout-sets"
 				type="number"
 				onChange={(e) => setSets(e.target.value)}
 				value={sets}

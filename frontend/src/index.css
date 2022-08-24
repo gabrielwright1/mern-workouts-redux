@@ -4,6 +4,7 @@
 /* layout */
 :root {
 	--primary: purple;
+	--secondary: lightgray;
 	--error: #e7195a;
 }
 
@@ -91,10 +92,37 @@ h2 {
 	max-width: 480px;
 	width: 100%;
 }
+/* timer */
 .timer-wrapper {
-	border: 1px solid red;
-	margin: 20px;
+	margin: 20px 0;
 	width: calc(100% - 20px);
+	max-height: 194px;
+	position: relative;
+	padding: 20px 20px 40px 20px;
+}
+.timer-display {
+	border: 1px solid red;
+	height: 100px;
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.timer-display p {
+	font-size: 25px;
+}
+
+.start-btn,
+.stop-btn {
+	margin: 0 5px;
+	position: absolute;
+	right: 20px;
+	bottom: 15px;
+}
+
+.stop-btn {
+	background-color: var(--secondary);
+	color: black;
 }
 
 .update-btn,
