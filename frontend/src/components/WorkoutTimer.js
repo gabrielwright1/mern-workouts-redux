@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectActiveWorkouts } from "../redux/features/timerSlice";
 import {
@@ -7,52 +7,51 @@ import {
 } from "../redux/features/timerSlice";
 
 const WorkoutTimer = ({ workout }) => {
-	let countdown;
-
 	const dispatch = useDispatch();
-	const activeWorkouts = useSelector(selectActiveWorkouts);
-	const [timer, setTimer] = useState("");
+
+	const [timer, setTimer] = useState(5);
 	const [isRunning, setIsRunning] = useState(false);
+	const [isRestartAvailable, setIsRestartAvailable] = useState(false);
+
+	const firstStart = useRef(true);
+	const tick = useRef();
 
 	useEffect(() => {
-		if (activeWorkouts.includes(workout._id)) {
-			setIsRunning(true);
-		} else {
-			setIsRunning(false);
+		if (firstStart.current) {
+			firstStart.current = !firstStart.current;
+			return;
 		}
-	}, [activeWorkouts]);
 
-	useEffect(() => {
 		if (isRunning) {
-			runTimer(5);
+			tick.current = setInterval(() => {
+				setTimer((timer) => timer - 1);
+			}, 1000);
 		}
+
+		return () => clearInterval(tick.current);
 	}, [isRunning]);
 
-	const runTimer = (seconds) => {
-		const now = Date.now();
-		const then = now + seconds * 1000;
-
-		countdown = setInterval(() => {
-			const secondsLeft = Math.round((then - Date.now()) / 1000);
-			if (secondsLeft < 0) {
-				setIsRunning(false);
-				stopTimer();
-				return;
-			}
-			setTimer(secondsLeft);
-		});
-	};
-
-	const stopTimer = () => {
-		clearInterval(countdown);
-	};
+	useEffect(() => {
+		if (timer <= 0) {
+			setIsRestartAvailable(true);
+			setIsRunning(false);
+		}
+	}, [timer]);
 
 	const handleStartTimer = () => {
 		dispatch(addActiveWorkout(workout));
+		setIsRunning(true);
 	};
+
 	const handleStopTimer = () => {
 		dispatch(removeActiveWorkout(workout));
-		stopTimer();
+		setIsRunning(false);
+	};
+
+	const handleRestartTimer = () => {
+		setTimer(5);
+		setIsRunning(true);
+		setIsRestartAvailable(false);
 	};
 
 	return (
@@ -65,11 +64,21 @@ const WorkoutTimer = ({ workout }) => {
 				</p>
 			</div>
 			<div className="timer-controls">
-				{!isRunning && (
+				{isRestartAvailable && (
+					<button
+						className="restart-btn"
+						onClick={handleRestartTimer}
+					>
+						Restart
+					</button>
+				)}
+
+				{!isRunning && !isRestartAvailable && (
 					<button className="start-btn" onClick={handleStartTimer}>
 						Start
 					</button>
 				)}
+
 				{isRunning && (
 					<button className="stop-btn" onClick={handleStopTimer}>
 						Stop

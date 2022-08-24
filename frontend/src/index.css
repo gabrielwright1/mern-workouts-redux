@@ -94,15 +94,14 @@ h2 {
 }
 /* timer */
 .timer-wrapper {
+	max-height: 124px;
 	margin: 20px 0;
 	width: calc(100% - 20px);
-	max-height: 194px;
 	position: relative;
 	padding: 20px 20px 40px 20px;
+	border: 1px solid red;
 }
 .timer-display {
-	border: 1px solid red;
-	height: 100px;
 	display: flex;
 	text-align: center;
 	justify-content: center;
@@ -113,7 +112,8 @@ h2 {
 }
 
 .start-btn,
-.stop-btn {
+.stop-btn,
+.restart-btn {
 	margin: 0 5px;
 	position: absolute;
 	right: 20px;
