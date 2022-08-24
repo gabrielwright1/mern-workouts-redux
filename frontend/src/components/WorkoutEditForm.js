@@ -15,6 +15,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
+	const [sets, setSets] = useState("");
 	const [error, setError] = useState(null);
 	const [emptyFields, setEmptyFields] = useState([]);
 
@@ -33,7 +34,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const workout = { id, title, load, reps };
+		const workout = { id, title, load, reps, sets };
 		dispatch(updateWorkout({ workout, user }));
 	};
 
@@ -67,6 +68,15 @@ const WorkoutEditForm = ({ workoutId }) => {
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
+
+			<label>Number of Sets:</label>
+			<input
+				type="number"
+				onChange={(e) => setSets(e.target.value)}
+				value={sets}
+				className={emptyFields.includes("sets") ? "error" : ""}
+			/>
+
 			<button className="close-btn" type="button" onClick={handleClose}>
 				Close
 			</button>

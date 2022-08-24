@@ -191,10 +191,10 @@ const workoutsSlice = createSlice({
 			.addCase(updateWorkout.rejected, (state, action) => {
 				state.updateWorkoutStatus = "failed";
 
-				const { id, emptyFields, title, load, reps, error } =
+				const { id, emptyFields, title, load, reps, sets, error } =
 					action.payload;
 
-				let pendingFields = { title, load, reps };
+				let pendingFields = { title, load, reps, sets };
 
 				if (!title) {
 					delete pendingFields.title;
@@ -204,6 +204,9 @@ const workoutsSlice = createSlice({
 				}
 				if (!reps) {
 					delete pendingFields.reps;
+				}
+				if (!sets) {
+					delete pendingFields.sets;
 				}
 
 				// if it exists then update it, otherwise add it
