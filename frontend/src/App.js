@@ -7,6 +7,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Footer from "./components/Footer";
 
 function App() {
 	const user = useSelector(selectUser);
@@ -32,6 +33,7 @@ function App() {
 					</Routes>
 				</div>
 			</BrowserRouter>
+			<Footer />
 		</div>
 	);
 }
