@@ -20,16 +20,17 @@ https://mern-workouts-redux.herokuapp.com/
 Gabriel Wright
 
 ## Technology used:
-HTML5
-CSS3
-SASS
-JavaScript
-React (hooks, routing)
-MongoDB
-Express
-Redux (Redux Toolkit, selectors, hooks)
-JWT Authentication
-Bcrypt (salting, hashing)
+- HTML5
+- CSS3
+- SASS
+- JavaScript
+- React (hooks, routing)
+- MongoDB
+- Express
+- Redux (Redux Toolkit, selectors, hooks)
+- JWT Authentication
+- Bcrypt (salting, hashing)
+- Postman
 
 ## Technical Wins:
 - Connecting a front-end to a back-end
