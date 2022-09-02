@@ -1,10 +1,10 @@
-My Workout Planner App - MERN + Redux + Auth
+# My Workout Planner App - MERN + Redux + Auth
 
-Live site:
+## Live site:
 
 https://mern-workouts-redux.herokuapp.com/
 
-Objectives:
+## Objectives:
 - To create a back-end API to handle CRUD operations from the client
 - To set up a cloud database via MongoDB Atlas
 - To connect the API to the cloud database to store persistent data
@@ -16,10 +16,10 @@ Objectives:
 - To set up error handling for the different error states that may occur between components
 - To deploy the app to Heroku
 
-Team members:
+## Team members:
 Gabriel Wright
 
-Technology used:
+## Technology used:
 HTML5
 CSS3
 SASS
@@ -31,7 +31,7 @@ Redux (Redux Toolkit, selectors, hooks)
 JWT Authentication
 Bcrypt (salting, hashing)
 
-Technical Wins:
+## Technical Wins:
 - Connecting a front-end to a back-end
 - Passing information from a database into the Redux store
 - Conditionally rendering a UI based on the Redux store's state
