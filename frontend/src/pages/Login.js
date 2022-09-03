@@ -33,7 +33,6 @@ const Login = () => {
 	};
 
 	const handleGuestLogin = async () => {
-		setIsLoading(true);
 		setEmail("guest@guest.ca");
 		setPassword("Guest123#");
 	};
