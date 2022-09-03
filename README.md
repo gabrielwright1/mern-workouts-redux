@@ -1,4 +1,4 @@
-# My Workout Planner App (MERN + Redux + Auth)
+# My Workout Planner App
 
 ## Live site:
 
