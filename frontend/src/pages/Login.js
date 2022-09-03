@@ -16,20 +16,24 @@ const Login = () => {
 	const loginError = useSelector(selectLoginError);
 
 	useEffect(() => {
-		if (loginStatus === "loading") {
-			setIsLoading(true);
-		} else {
+		if (loginStatus !== "loading") {
 			setIsLoading(false);
 		}
 	}, [loginStatus]);
 
+	const sleep = (ms) => {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	};
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-
+		setIsLoading(true);
+		await sleep(800);
 		await dispatch(loginUser({ email, password }));
 	};
 
-	const handleGuestLogin = () => {
+	const handleGuestLogin = async () => {
+		setIsLoading(true);
 		setEmail("guest@guest.ca");
 		setPassword("Guest123#");
 	};
@@ -59,6 +63,7 @@ const Login = () => {
 			>
 				Login as guest
 			</button>
+			{isLoading && <span className="loading">Loading</span>}
 
 			{loginError && <div className="error">{loginError}</div>}
 			<div className="img-container">

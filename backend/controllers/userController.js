@@ -6,10 +6,6 @@ const createToken = require("../utility/createToken");
 // @route     POST /api/user/login
 // @access    Public
 const loginUser = async (req, res) => {
-	// pull out the email/password from the request
-	// try to login, store the user if successful
-	// create a token based on the user id
-	// return email/token, status 200
 	const { email, password } = req.body;
 
 	try {
@@ -25,10 +21,6 @@ const loginUser = async (req, res) => {
 // @route   POST /api/user/signup
 // @access  Public
 const signupUser = async (req, res) => {
-	// pull out the email/password from the request
-	// try to signup, store user if successful
-	// create a token based on user id
-	// return email/token, status 200
 	const { email, password } = req.body;
 
 	try {

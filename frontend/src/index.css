@@ -298,11 +298,37 @@ h2 {
 .user-options span,
 .user-options a {
 	text-decoration: underline;
-	cursor: pointer;
 	color: var(--primary);
+}
+/* loading animation*/
+/* source: https://stackoverflow.com/a/28074607 */
+.loading:after {
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: bottom;
+	-webkit-animation: ellipsis steps(4, end) 500ms infinite;
+	animation: ellipsis steps(4, end) 500ms infinite;
+	content: "\2026";
+	width: 0px;
+}
+
+@keyframes ellipsis {
+	to {
+		width: 20px;
+	}
+}
+
+@-webkit-keyframes ellipsis {
+	to {
+		width: 20px;
+	}
 }
 
 /* new workout form */
+form.create {
+	padding: 0 0 20px 0;
+}
+
 label,
 input {
 	display: block;
@@ -358,7 +384,6 @@ img {
 }
 
 /* footer */
-
 .footer p {
 	text-align: center;
 	margin: 0 0 10px 0;

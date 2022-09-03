@@ -28,7 +28,9 @@ userSchema.statics.signup = async function (email, password) {
 		throw Error("Email not valid");
 	}
 	if (!validator.isStrongPassword(password)) {
-		throw Error("Password not strong enough");
+		throw Error(
+			"Password must be 8 characters. Please include uppercase, lowercase, number, and special character"
+		);
 	}
 
 	// check if its already in use
