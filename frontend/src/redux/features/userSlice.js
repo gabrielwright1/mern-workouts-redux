@@ -78,7 +78,6 @@ const userSlice = createSlice({
 			})
 			.addCase(loginUser.rejected, (state, action) => {
 				state.loginStatus = "failed";
-				console.log(action.error);
 				state.loginError = action.payload.error;
 			})
 			.addCase(signupUser.pending, (state, action) => {
