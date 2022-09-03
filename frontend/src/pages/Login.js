@@ -27,8 +27,10 @@ const Login = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setIsLoading(true);
-		await sleep(800);
+		if (email && password) {
+			setIsLoading(true);
+			await sleep(800);
+		}
 		await dispatch(loginUser({ email, password }));
 	};
 
