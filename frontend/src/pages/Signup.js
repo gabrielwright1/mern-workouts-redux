@@ -5,6 +5,7 @@ import {
 	selectSignupError,
 	selectSignupStatus,
 } from "../redux/features/userSlice";
+import sleep from "../utils/sleep";
 
 const Signup = () => {
 	const dispatch = useDispatch();
@@ -16,15 +17,17 @@ const Signup = () => {
 	const signupStatus = useSelector(selectSignupStatus);
 
 	useEffect(() => {
-		if (signupStatus === "loading") {
-			setIsLoading(true);
-		} else {
+		if (signupStatus !== "loading") {
 			setIsLoading(false);
 		}
 	}, [signupStatus]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		if (email && password) {
+			setIsLoading(true);
+			await sleep(800);
+		}
 		dispatch(signupUser({ email, password }));
 	};
 
@@ -46,6 +49,8 @@ const Signup = () => {
 			/>
 
 			<button disabled={isLoading}>Sign up</button>
+			{isLoading && <span className="loading">Loading</span>}
+
 			{signupError && <div className="error">{signupError}</div>}
 			<div className="img-container">
 				<img

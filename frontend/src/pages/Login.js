@@ -5,6 +5,7 @@ import {
 	selectLoginError,
 	selectLoginStatus,
 } from "../redux/features/userSlice";
+import sleep from "../utils/sleep";
 
 const Login = () => {
 	const dispatch = useDispatch();
@@ -20,10 +21,6 @@ const Login = () => {
 			setIsLoading(false);
 		}
 	}, [loginStatus]);
-
-	const sleep = (ms) => {
-		return new Promise((resolve) => setTimeout(resolve, ms));
-	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
