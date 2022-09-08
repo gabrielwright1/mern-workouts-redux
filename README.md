@@ -42,9 +42,10 @@ Gabriel Wright
 -   Conditionally rendering a UI based on the Redux store's state
 -   Deploying a full stack app to Heroku
 
-## Tutorials built upon:
-
+## References:
+- https://redux.js.org/tutorials/essentials/part-1-overview-concepts
+- https://redux.js.org/tutorials/fundamentals/part-1-overview
+-   https://dev.to/stlnick/how-to-deploy-a-full-stack-mern-app-with-heroku-netlify-ncb
 -   https://www.youtube.com/watch?v=-0exw-9YJBo&list=PLillGF-RfqbbQeVSccR9PGKHzPJSWqcsm&ab_channel=TraversyMedia
 -   https://www.youtube.com/watch?v=WsRBmwNkv3Q&ab_channel=TheNetNinja
--   https://dev.to/stlnick/how-to-deploy-a-full-stack-mern-app-with-heroku-netlify-ncb
 -   https://www.youtube.com/watch?v=XqpkptgOrtE&t=5714s&ab_channel=CodeWithVishal
