@@ -1,20 +1,22 @@
 import { useEffect, useState, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectActiveWorkouts } from "../redux/features/timerSlice";
-import {
-	addActiveWorkout,
-	removeActiveWorkout,
-} from "../redux/features/timerSlice";
+import { useSelector } from "react-redux";
+import { selectAllWorkouts } from "../redux/features/workoutsSlice";
 
 const WorkoutTimer = ({ workout }) => {
-	const dispatch = useDispatch();
-
 	const [timer, setTimer] = useState(5);
 	const [isRunning, setIsRunning] = useState(false);
 	const [isRestartAvailable, setIsRestartAvailable] = useState(false);
+	const [remainder, setRemainder] = useState(0);
+	const [total, setTotal] = useState(0);
+
+	const allWorkouts = useSelector(selectAllWorkouts);
 
 	const firstStart = useRef(true);
 	const tick = useRef();
+
+	useEffect(() => {
+		initializeDisplay();
+	}, [allWorkouts]);
 
 	useEffect(() => {
 		if (firstStart.current) {
@@ -33,22 +35,42 @@ const WorkoutTimer = ({ workout }) => {
 
 	useEffect(() => {
 		if (timer <= 0) {
+			updateRemainder();
 			setIsRestartAvailable(true);
 			setIsRunning(false);
 		}
 	}, [timer]);
 
+	const updateRemainder = () => {
+		const newRemainder = remainder - 1;
+		setRemainder(newRemainder);
+	};
+
+	const initializeDisplay = () => {
+		allWorkouts.forEach((item) => {
+			if (item._id === workout._id) {
+				setRemainder(item.sets);
+				setTotal(item.sets);
+			}
+		});
+	};
+
 	const handleStartTimer = () => {
-		dispatch(addActiveWorkout(workout));
 		setIsRunning(true);
 	};
 
 	const handleStopTimer = () => {
-		dispatch(removeActiveWorkout(workout));
 		setIsRunning(false);
 	};
 
+	const handleNextTimer = () => {
+		setTimer(5);
+		setIsRunning(true);
+		setIsRestartAvailable(false);
+	};
+
 	const handleRestartTimer = () => {
+		setRemainder(total);
 		setTimer(5);
 		setIsRunning(true);
 		setIsRestartAvailable(false);
@@ -58,18 +80,23 @@ const WorkoutTimer = ({ workout }) => {
 		<div className="timer-wrapper">
 			<div className="timer-display">
 				<p>
-					<strong>Timer: </strong>
-					<br />
-					{timer}
+					Timer: <span>{timer}</span>
 				</p>
+				<div className="set-remainder">Remaining sets: {remainder}</div>
 			</div>
 			<div className="timer-controls">
-				{isRestartAvailable && (
+				{isRestartAvailable && remainder > 0 && (
+					<button className="next-btn" onClick={handleNextTimer}>
+						Next Round
+					</button>
+				)}
+
+				{isRestartAvailable && remainder === 0 && (
 					<button
 						className="restart-btn"
 						onClick={handleRestartTimer}
 					>
-						Restart
+						Restart Exercise
 					</button>
 				)}
 
