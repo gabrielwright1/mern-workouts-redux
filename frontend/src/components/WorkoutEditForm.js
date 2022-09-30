@@ -46,6 +46,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 
 	return (
 		<form className="edit" onSubmit={handleSubmit}>
+			<h4>Edit Workout:</h4>
 			<label htmlFor="edit-workout-title">Exercise Title:</label>
 			<input
 				id="edit-workout-title"

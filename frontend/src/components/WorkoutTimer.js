@@ -1,6 +1,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
-import { selectAllWorkouts } from "../redux/features/workoutsSlice";
+import {
+	selectAllWorkouts,
+	selectEditableWorkouts,
+} from "../redux/features/workoutsSlice";
 
 const WorkoutTimer = ({ workout }) => {
 	const [timer, setTimer] = useState(5);
@@ -8,8 +11,10 @@ const WorkoutTimer = ({ workout }) => {
 	const [isRestartAvailable, setIsRestartAvailable] = useState(false);
 	const [remainder, setRemainder] = useState(0);
 	const [total, setTotal] = useState(0);
+	const [editable, setEditable] = useState(false);
 
 	const allWorkouts = useSelector(selectAllWorkouts);
+	const editableWorkouts = useSelector(selectEditableWorkouts);
 
 	const firstStart = useRef(true);
 	const tick = useRef();
@@ -17,6 +22,14 @@ const WorkoutTimer = ({ workout }) => {
 	useEffect(() => {
 		initializeDisplay();
 	}, [allWorkouts]);
+
+	useEffect(() => {
+		if (editableWorkouts.includes(workout._id)) {
+			setEditable(true);
+		} else {
+			setEditable(false);
+		}
+	}, [editableWorkouts]);
 
 	useEffect(() => {
 		if (firstStart.current) {
@@ -79,37 +92,44 @@ const WorkoutTimer = ({ workout }) => {
 	return (
 		<div className="timer-wrapper">
 			<div className="timer-display">
-				<h4>Timer:</h4>
-				<div className="timer-count">{timer}</div>
-				<div className="set-remainder">Remaining sets: {remainder}</div>
-			</div>
-			<div className="timer-controls">
-				{isRestartAvailable && remainder > 0 && (
-					<button className="next-btn" onClick={handleNextTimer}>
-						Next Round
-					</button>
-				)}
+				<h4>Workout Timer:</h4>
+				<div className={`timer-count ${isRunning ? "active" : ""}`}>
+					{timer}
+				</div>
+				<div className="timer-remainder">
+					Remaining sets: {remainder}
+				</div>
+				<div className="timer-controls">
+					{isRestartAvailable && remainder > 0 && (
+						<button className="next-btn" onClick={handleNextTimer}>
+							Next Round
+						</button>
+					)}
 
-				{isRestartAvailable && remainder === 0 && (
-					<button
-						className="restart-btn"
-						onClick={handleRestartTimer}
-					>
-						Restart Exercise
-					</button>
-				)}
+					{isRestartAvailable && remainder === 0 && (
+						<button
+							className="restart-btn"
+							onClick={handleRestartTimer}
+						>
+							Restart
+						</button>
+					)}
 
-				{!isRunning && !isRestartAvailable && (
-					<button className="start-btn" onClick={handleStartTimer}>
-						Start
-					</button>
-				)}
+					{!isRunning && !isRestartAvailable && (
+						<button
+							className="start-btn"
+							onClick={handleStartTimer}
+						>
+							Start
+						</button>
+					)}
 
-				{isRunning && (
-					<button className="stop-btn" onClick={handleStopTimer}>
-						Stop
-					</button>
-				)}
+					{isRunning && (
+						<button className="stop-btn" onClick={handleStopTimer}>
+							Stop
+						</button>
+					)}
+				</div>
 			</div>
 		</div>
 	);

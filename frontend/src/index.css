@@ -265,7 +265,9 @@ h2 {
 	position: relative;
 }
 .workout-details {
-	display: flex;
+	position: relative;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+	margin: 20px 0;
 }
 .workout-details h4 {
 	margin: 0 0 10px 0;
@@ -277,38 +279,32 @@ h2 {
 	font-size: 0.9em;
 	color: #555;
 }
-.workout-details span {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	cursor: pointer;
-	background: #f1f1f1;
-	padding: 6px;
-	border-radius: 50%;
-	color: #333;
-}
+
 .form-wrapper {
 	background: #fff;
 	border-radius: 4px;
-	margin: 20px 0;
 	padding: 20px 20px 40px 20px;
 	position: relative;
-	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
-	max-width: 480px;
 	width: 100%;
 }
-form.edit {
-	margin-top: 15px;
+.upper-wrapper {
+	display: flex;
 }
-
+.lower-wrapper {
+	background-color: #fff;
+	position: relative;
+}
+form.edit {
+	padding: 10px 20px 50px 20px;
+}
+form.edit input {
+	margin: 5px 0;
+}
 /* timer */
 .timer-wrapper {
-	margin: 20px 0;
 	width: calc(100% - 20px);
-	position: relative;
 	padding: 20px 20px 40px 20px;
 	background-color: white;
-	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .timer-display {
@@ -316,6 +312,7 @@ form.edit {
 	text-align: center;
 	justify-content: center;
 	flex-direction: column;
+	position: relative;
 }
 
 .timer-count {
@@ -327,19 +324,34 @@ form.edit {
 	margin: 0 0 20px 0;
 	background-color: #f1f1f1;
 }
-
-.set-remainder {
-	position: absolute;
-	bottom: 20px;
+.active {
+	background-color: lightgreen;
 }
 
+.timer-remainder {
+	position: absolute;
+	bottom: 0px;
+	padding: 5px 0;
+	bottom: -25px;
+}
+
+.remove-btn {
+	position: absolute;
+	left: 300px;
+	top: 15px;
+	cursor: pointer;
+	background: #f1f1f1;
+	padding: 6px;
+	border-radius: 50%;
+	color: #333;
+}
 .start-btn,
 .stop-btn,
 .restart-btn,
 .next-btn {
 	position: absolute;
-	right: 20px;
-	bottom: 15px;
+	right: 0px;
+	bottom: -25px;
 }
 
 .stop-btn {
@@ -347,17 +359,20 @@ form.edit {
 	color: black;
 }
 
-.update-btn,
 .edit-btn {
 	position: absolute;
-	right: 20px;
 	bottom: 15px;
+	left: 285px;
+}
+.update-btn {
+	position: absolute;
+	bottom: 15px;
+	right: 20px;
 }
 .close-btn {
 	position: absolute;
-	right: 100px;
 	bottom: 15px;
-	margin: 0 5px;
+	right: 105px;
 }
 
 .workouts-list ul {
