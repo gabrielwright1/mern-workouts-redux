@@ -79,9 +79,8 @@ const WorkoutTimer = ({ workout }) => {
 	return (
 		<div className="timer-wrapper">
 			<div className="timer-display">
-				<p>
-					Timer: <span>{timer}</span>
-				</p>
+				<h4>Timer:</h4>
+				<div className="timer-count">{timer}</div>
 				<div className="set-remainder">Remaining sets: {remainder}</div>
 			</div>
 			<div className="timer-controls">
