@@ -5,6 +5,7 @@ import {
 	selectSignupError,
 	selectSignupStatus,
 } from "../redux/features/userSlice";
+import sleep from "../utils/sleep";
 
 const Signup = () => {
 	const dispatch = useDispatch();
@@ -16,15 +17,17 @@ const Signup = () => {
 	const signupStatus = useSelector(selectSignupStatus);
 
 	useEffect(() => {
-		if (signupStatus === "loading") {
-			setIsLoading(true);
-		} else {
+		if (signupStatus !== "loading") {
 			setIsLoading(false);
 		}
 	}, [signupStatus]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		if (email && password) {
+			setIsLoading(true);
+			await sleep(800);
+		}
 		dispatch(signupUser({ email, password }));
 	};
 
@@ -46,7 +49,15 @@ const Signup = () => {
 			/>
 
 			<button disabled={isLoading}>Sign up</button>
+			{isLoading && <span className="loading">Loading</span>}
+
 			{signupError && <div className="error">{signupError}</div>}
+			<div className="img-container">
+				<img
+					src="https://images.unsplash.com/photo-1599058918144-1ffabb6ab9a0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=869&q=80"
+					alt="Photocredit to Karsten Winegeart on Unsplash"
+				></img>
+			</div>
 		</form>
 	);
 };

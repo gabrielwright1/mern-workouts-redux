@@ -134,7 +134,8 @@ const workoutsSlice = createSlice({
 			})
 			.addCase(fetchWorkouts.rejected, (state, action) => {
 				state.fetchStatus = "failed";
-				state.fetchError = action.error.message;
+				state.fetchError =
+					"Something went wrong while fetching the workouts";
 			})
 			.addCase(deleteWorkout.pending, (state, action) => {
 				state.deleteStatus = "loading";
