@@ -6,11 +6,13 @@ import {
 } from "../redux/features/workoutsSlice";
 
 const WorkoutTimer = ({ workout }) => {
-	const [timer, setTimer] = useState(5);
+	const [baseTime, setBaseTime] = useState(10);
+	const [timer, setTimer] = useState();
 	const [isRunning, setIsRunning] = useState(false);
 	const [isRestartAvailable, setIsRestartAvailable] = useState(false);
 	const [remainder, setRemainder] = useState(0);
 	const [total, setTotal] = useState(0);
+	const [isDisabled, setIsDisabled] = useState(false);
 
 	const allWorkouts = useSelector(selectAllWorkouts);
 
@@ -44,18 +46,22 @@ const WorkoutTimer = ({ workout }) => {
 		}
 	}, [timer]);
 
+	useEffect(() => {
+		setTimer(baseTime);
+		baseTime <= 5 ? setIsDisabled(true) : setIsDisabled(false);
+	}, [baseTime]);
+
+	const initializeDisplay = () => {
+		const selectedWorkout = allWorkouts.find(
+			(element) => element._id === workout._id
+		);
+		setRemainder(selectedWorkout.sets);
+		setTotal(selectedWorkout.sets);
+	};
+
 	const updateRemainder = () => {
 		const newRemainder = remainder - 1;
 		setRemainder(newRemainder);
-	};
-
-	const initializeDisplay = () => {
-		allWorkouts.forEach((item) => {
-			if (item._id === workout._id) {
-				setRemainder(item.sets);
-				setTotal(item.sets);
-			}
-		});
 	};
 
 	const handleStartTimer = () => {
@@ -67,25 +73,25 @@ const WorkoutTimer = ({ workout }) => {
 	};
 
 	const handleNextTimer = () => {
-		setTimer(5);
+		setTimer(baseTime);
 		setIsRunning(true);
 		setIsRestartAvailable(false);
 	};
 
 	const handleRestartTimer = () => {
 		setRemainder(total);
-		setTimer(5);
+		setTimer(baseTime);
 		setIsRunning(true);
 		setIsRestartAvailable(false);
 	};
 
 	const handleIncrement = () => {
-		const newTime = timer + 5;
-		setTimer(newTime);
+		const newTime = baseTime + 5;
+		setBaseTime(newTime);
 	};
 	const handleDecrement = () => {
-		const newTime = timer - 5;
-		setTimer(newTime);
+		const newTime = baseTime - 5;
+		if (baseTime > 5) setBaseTime(newTime);
 	};
 
 	return (
@@ -102,7 +108,13 @@ const WorkoutTimer = ({ workout }) => {
 						<button className="increment" onClick={handleIncrement}>
 							+
 						</button>
-						<button className="decrement" onClick={handleDecrement}>
+						<button
+							className={`decrement ${
+								isDisabled ? "disabled" : ""
+							}`}
+							onClick={handleDecrement}
+							disabled={isDisabled}
+						>
 							-
 						</button>
 					</div>

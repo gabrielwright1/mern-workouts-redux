@@ -319,7 +319,7 @@ form.edit input {
 	margin: 0 0 20px 0;
 	position: relative;
 	border-radius: 4px;
-	background-color: #f1f1f1;
+	background-color: lightyellow;
 }
 .timer-count {
 	flex-grow: 1;
@@ -373,7 +373,8 @@ form.edit input {
 	right: 20px;
 }
 
-.stop-btn {
+.stop-btn,
+.disabled {
 	background-color: var(--secondary);
 	color: black;
 }
