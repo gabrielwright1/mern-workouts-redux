@@ -209,6 +209,7 @@ template {
 /* layout */
 :root {
 	--primary: purple;
+	--secondary: lightgray;
 	--error: #e7195a;
 }
 
@@ -243,6 +244,12 @@ h2 {
 	padding: 20px;
 	margin: 0 auto;
 }
+/* navbar */
+.user-options span,
+.user-options a {
+	text-decoration: underline;
+	color: var(--primary);
+}
 
 /* homepage */
 .home {
@@ -250,13 +257,17 @@ h2 {
 	grid-template-columns: 3fr 1fr;
 	gap: 105px;
 }
+
+/* saved workouts */
+.workouts-list ul {
+	list-style-type: none;
+	padding: 0;
+	position: relative;
+}
 .workout-details {
-	background: #fff;
-	border-radius: 4px;
-	margin: 20px auto;
-	padding: 20px 20px 40px 20px;
 	position: relative;
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+	margin: 20px 0;
 }
 .workout-details h4 {
 	margin: 0 0 10px 0;
@@ -268,27 +279,121 @@ h2 {
 	font-size: 0.9em;
 	color: #555;
 }
-.workout-details span {
+
+.display-wrapper {
+	background: #fff;
+	border-radius: 4px;
+	padding: 20px 20px 40px 20px;
+	position: relative;
+	width: 100%;
+}
+.upper-wrapper {
+	display: flex;
+}
+.lower-wrapper {
+	background-color: #fff;
+	position: relative;
+}
+form.edit {
+	padding: 10px 20px 50px 20px;
+}
+form.edit input {
+	margin: 5px 0;
+}
+/* timer */
+.timer-wrapper {
+	width: calc(100% - 20px);
+	padding: 20px 20px 40px 20px;
+	background-color: white;
+	position: relative;
+}
+
+.timer-display {
+	display: flex;
+	text-align: center;
+	justify-content: center;
+	flex-direction: column;
+}
+.timer-display-panel {
+	display: flex;
+	margin: 0 0 20px 0;
+	position: relative;
+	border-radius: 4px;
+	background-color: lightyellow;
+}
+.timer-count {
+	flex-grow: 1;
+	display: block;
+	position: static;
+	font-weight: normal;
+	font-size: 40px;
+}
+.active {
+	background-color: lightgreen;
+}
+
+.timer-remainder {
 	position: absolute;
-	top: 20px;
-	right: 20px;
+	bottom: 11px;
+	padding: 5px 0;
+}
+.timer-buttons {
+	display: flex;
+	flex-direction: column;
+}
+.increment,
+.decrement {
+	padding: 2px 6px;
+}
+.increment {
+	right: 0;
+	top: 0;
+	margin-bottom: 2px;
+}
+.decrement {
+	right: 0;
+	bottom: 0;
+}
+
+.remove-btn {
+	position: absolute;
+	right: 0;
+	top: 12.5px;
 	cursor: pointer;
 	background: #f1f1f1;
 	padding: 6px;
 	border-radius: 50%;
 	color: #333;
 }
-.update-btn,
-.edit-btn {
+.start-btn,
+.stop-btn,
+.restart-btn,
+.next-btn {
 	position: absolute;
 	right: 20px;
+}
+
+.stop-btn,
+.disabled {
+	background-color: var(--secondary);
+	color: black;
+}
+.add-btn {
+	margin: 20px 0 0 0;
+}
+.edit-btn {
+	position: absolute;
+	right: 0;
+}
+.update-btn {
+	position: absolute;
 	bottom: 15px;
+	right: 20px;
 }
 .close-btn {
 	position: absolute;
-	right: 100px;
 	bottom: 15px;
-	margin: 0 5px;
+	right: 105px;
 }
 
 .workouts-list ul {
@@ -325,18 +430,13 @@ h2 {
 }
 
 /* new workout form */
-form.create {
-	padding: 0 0 20px 0;
-}
-
 label,
 input {
 	display: block;
 }
 input {
 	padding: 10px;
-	margin-top: 10px;
-	margin-bottom: 20px;
+	margin: 5px 0;
 	width: 100%;
 	border: 1px solid #ddd;
 	border-radius: 4px;
@@ -389,8 +489,7 @@ img {
 	margin: 0 0 10px 0;
 }
 
-/* Landscape phones and down */
-@media (max-width: 600px) {
+@media (max-width: 630px) {
 	header .container {
 		flex-direction: column;
 		position: relative;
@@ -398,8 +497,22 @@ img {
 	h1 {
 		text-align: center;
 	}
-
 	h2 {
 		text-align: center;
+	}
+	.upper-wrapper {
+		flex-direction: column-reverse;
+		position: relative;
+	}
+
+	.timer-wrapper {
+		width: 100%;
+	}
+	.timer-wrapper h4 {
+		text-align: left;
+	}
+	.edit-btn,
+	.remove-btn {
+		right: 20px;
 	}
 }

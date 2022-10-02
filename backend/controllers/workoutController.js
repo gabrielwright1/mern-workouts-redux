@@ -37,7 +37,7 @@ const getWorkout = async (req, res) => {
 const createWorkout = async (req, res) => {
 	const user_id = req.user._id;
 
-	const { title, load, reps } = req.body;
+	const { title, load, reps, sets } = req.body;
 
 	let emptyFields = [];
 
@@ -50,6 +50,9 @@ const createWorkout = async (req, res) => {
 	if (!reps) {
 		emptyFields.push("reps");
 	}
+	if (!sets) {
+		emptyFields.push("sets");
+	}
 	if (emptyFields.length > 0) {
 		return res
 			.status(400)
@@ -57,7 +60,13 @@ const createWorkout = async (req, res) => {
 	}
 
 	try {
-		const workout = await Workout.create({ title, load, reps, user_id });
+		const workout = await Workout.create({
+			title,
+			load,
+			reps,
+			sets,
+			user_id,
+		});
 		res.status(200).json(workout);
 	} catch (error) {
 		res.status(400).json({ error: error.message });
@@ -88,7 +97,7 @@ const deleteWorkout = async (req, res) => {
 // @access    Private
 const updateWorkout = async (req, res) => {
 	const { id } = req.params;
-	const { title, load, reps } = req.body;
+	const { title, load, reps, sets } = req.body;
 	let emptyFields = [];
 
 	if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -105,6 +114,9 @@ const updateWorkout = async (req, res) => {
 	if (!reps) {
 		emptyFields.push("reps");
 	}
+	if (!sets) {
+		emptyFields.push("sets");
+	}
 	if (emptyFields.length > 0) {
 		return res.status(400).json({
 			error: "Please fill in all fields",
@@ -113,6 +125,7 @@ const updateWorkout = async (req, res) => {
 			title,
 			load,
 			reps,
+			sets,
 		});
 	}
 

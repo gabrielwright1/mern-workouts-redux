@@ -6,6 +6,7 @@ import {
 	updateWorkout,
 	selectErroredWorkouts,
 } from "../redux/features/workoutsSlice";
+
 import { selectUser } from "../redux/features/userSlice";
 
 const WorkoutEditForm = ({ workoutId }) => {
@@ -15,6 +16,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
+	const [sets, setSets] = useState("");
 	const [error, setError] = useState(null);
 	const [emptyFields, setEmptyFields] = useState([]);
 
@@ -33,7 +35,7 @@ const WorkoutEditForm = ({ workoutId }) => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const workout = { id, title, load, reps };
+		const workout = { id, title, load, reps, sets };
 		dispatch(updateWorkout({ workout, user }));
 	};
 
@@ -44,29 +46,43 @@ const WorkoutEditForm = ({ workoutId }) => {
 
 	return (
 		<form className="edit" onSubmit={handleSubmit}>
-			<label>Exercise Title:</label>
+			<h4>Edit Workout:</h4>
+			<label htmlFor="edit-workout-title">Exercise Title:</label>
 			<input
+				id="edit-workout-title"
 				type="text"
 				onChange={(e) => setTitle(e.target.value)}
 				value={title}
 				className={emptyFields.includes("title") ? "error" : ""}
 			/>
 
-			<label>Load (in kg):</label>
+			<label htmlFor="edit-workout-load">Load (in kg):</label>
 			<input
+				id="edit-workout-load"
 				type="number"
 				onChange={(e) => setLoad(e.target.value)}
 				value={load}
 				className={emptyFields.includes("load") ? "error" : ""}
 			/>
 
-			<label>Number of Reps:</label>
+			<label htmlFor="edit-workout-reps">Number of Reps:</label>
 			<input
+				id="edit-workout-reps"
 				type="number"
 				onChange={(e) => setReps(e.target.value)}
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
+
+			<label htmlFor="edit-workout-sets">Number of Sets:</label>
+			<input
+				id="edit-workout-sets"
+				type="number"
+				onChange={(e) => setSets(e.target.value)}
+				value={sets}
+				className={emptyFields.includes("sets") ? "error" : ""}
+			/>
+
 			<button className="close-btn" type="button" onClick={handleClose}>
 				Close
 			</button>

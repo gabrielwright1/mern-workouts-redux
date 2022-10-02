@@ -15,6 +15,7 @@ const WorkoutForm = () => {
 	const [title, setTitle] = useState("");
 	const [load, setLoad] = useState("");
 	const [reps, setReps] = useState("");
+	const [sets, setSets] = useState("");
 	const [error, setError] = useState(null);
 	const [emptyFields, setEmptyFields] = useState([]);
 
@@ -34,12 +35,13 @@ const WorkoutForm = () => {
 			setTitle("");
 			setLoad("");
 			setReps("");
+			setSets("");
 		}
 	}, [createFormStatus, createFormError, createFormEmptyFields]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const workout = { title, load, reps };
+		const workout = { title, load, reps, sets };
 		dispatch(createWorkout({ workout, user }));
 	};
 
@@ -47,31 +49,43 @@ const WorkoutForm = () => {
 		<form className="create" onSubmit={handleSubmit}>
 			<h2>Add a New Workout</h2>
 
-			<label>Exercise Title:</label>
+			<label htmlFor="new-workout-title">Exercise Title:</label>
 			<input
+				id="new-workout-title"
 				type="text"
 				onChange={(e) => setTitle(e.target.value)}
 				value={title}
 				className={emptyFields.includes("title") ? "error" : ""}
 			/>
 
-			<label>Load (in kg):</label>
+			<label htmlFor="new-workout-load">Load (in kg):</label>
 			<input
+				id="new-workout-load"
 				type="number"
 				onChange={(e) => setLoad(e.target.value)}
 				value={load}
 				className={emptyFields.includes("load") ? "error" : ""}
 			/>
 
-			<label>Number of Reps:</label>
+			<label htmlFor="new-workout-reps">Number of Reps:</label>
 			<input
+				id="new-workout-reps"
 				type="number"
 				onChange={(e) => setReps(e.target.value)}
 				value={reps}
 				className={emptyFields.includes("reps") ? "error" : ""}
 			/>
 
-			<button>Add Workout</button>
+			<label htmlFor="new-workout-sets">Number of Sets:</label>
+			<input
+				id="new-workout-sets"
+				type="number"
+				onChange={(e) => setSets(e.target.value)}
+				value={sets}
+				className={emptyFields.includes("sets") ? "error" : ""}
+			/>
+
+			<button className="add-btn">Add Workout</button>
 			{error && <div className="error">{error}</div>}
 		</form>
 	);
