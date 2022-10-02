@@ -280,7 +280,7 @@ h2 {
 	color: #555;
 }
 
-.form-wrapper {
+.display-wrapper {
 	background: #fff;
 	border-radius: 4px;
 	padding: 20px 20px 40px 20px;
@@ -305,6 +305,7 @@ form.edit input {
 	width: calc(100% - 20px);
 	padding: 20px 20px 40px 20px;
 	background-color: white;
+	position: relative;
 }
 
 .timer-display {
@@ -312,7 +313,6 @@ form.edit input {
 	text-align: center;
 	justify-content: center;
 	flex-direction: column;
-	position: relative;
 }
 
 .timer-count {
@@ -330,15 +330,14 @@ form.edit input {
 
 .timer-remainder {
 	position: absolute;
-	bottom: 0px;
+	bottom: 11px;
 	padding: 5px 0;
-	bottom: -25px;
 }
 
 .remove-btn {
 	position: absolute;
-	left: 300px;
-	top: 15px;
+	right: 0;
+	top: 12.5px;
 	cursor: pointer;
 	background: #f1f1f1;
 	padding: 6px;
@@ -350,19 +349,19 @@ form.edit input {
 .restart-btn,
 .next-btn {
 	position: absolute;
-	right: 0px;
-	bottom: -25px;
+	right: 20px;
 }
 
 .stop-btn {
 	background-color: var(--secondary);
 	color: black;
 }
-
+.add-btn {
+	margin: 20px 0 0 0;
+}
 .edit-btn {
 	position: absolute;
-	bottom: 15px;
-	left: 285px;
+	right: 0;
 }
 .update-btn {
 	position: absolute;
@@ -409,18 +408,13 @@ form.edit input {
 }
 
 /* new workout form */
-form.create {
-	padding: 0 0 20px 0;
-}
-
 label,
 input {
 	display: block;
 }
 input {
 	padding: 10px;
-	margin-top: 10px;
-	margin-bottom: 20px;
+	margin: 5px 0;
 	width: 100%;
 	border: 1px solid #ddd;
 	border-radius: 4px;
@@ -473,8 +467,7 @@ img {
 	margin: 0 0 10px 0;
 }
 
-/* Landscape phones and down */
-@media (max-width: 600px) {
+@media (max-width: 630px) {
 	header .container {
 		flex-direction: column;
 		position: relative;
@@ -482,8 +475,22 @@ img {
 	h1 {
 		text-align: center;
 	}
-
 	h2 {
 		text-align: center;
+	}
+	.upper-wrapper {
+		flex-direction: column-reverse;
+		position: relative;
+	}
+
+	.timer-wrapper {
+		width: 100%;
+	}
+	.timer-wrapper h4 {
+		margin: 0 0 25px 0;
+	}
+	.edit-btn,
+	.remove-btn {
+		right: 20px;
 	}
 }

@@ -85,7 +85,7 @@ const WorkoutForm = () => {
 				className={emptyFields.includes("sets") ? "error" : ""}
 			/>
 
-			<button>Add Workout</button>
+			<button className="add-btn">Add Workout</button>
 			{error && <div className="error">{error}</div>}
 		</form>
 	);

@@ -1,8 +1,22 @@
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
+import { selectUser } from "../redux/features/userSlice";
+import { openForm, deleteWorkout } from "../redux/features/workoutsSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const WorkoutCard = ({ workout }) => {
+const WorkoutCard = ({ workout, editable }) => {
+	const dispatch = useDispatch();
+	const user = useSelector(selectUser);
+
+	const handleDelete = async () => {
+		dispatch(deleteWorkout({ workout, user }));
+	};
+
+	const handleEdit = async () => {
+		dispatch(openForm(workout));
+	};
+
 	return (
-		<div className="form-wrapper">
+		<div className="display-wrapper">
 			<h4>{workout.title}</h4>
 			<p>
 				<strong>Load (kg): </strong>
@@ -22,6 +36,17 @@ const WorkoutCard = ({ workout }) => {
 					addSuffix: true,
 				})}
 			</p>
+			<span
+				className="remove-btn material-symbols-outlined"
+				onClick={handleDelete}
+			>
+				delete
+			</span>
+			{!editable && (
+				<button className="edit-btn" type="submit" onClick={handleEdit}>
+					Edit
+				</button>
+			)}
 		</div>
 	);
 };
