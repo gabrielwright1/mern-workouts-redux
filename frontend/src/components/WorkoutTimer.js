@@ -11,10 +11,8 @@ const WorkoutTimer = ({ workout }) => {
 	const [isRestartAvailable, setIsRestartAvailable] = useState(false);
 	const [remainder, setRemainder] = useState(0);
 	const [total, setTotal] = useState(0);
-	const [editable, setEditable] = useState(false);
 
 	const allWorkouts = useSelector(selectAllWorkouts);
-	const editableWorkouts = useSelector(selectEditableWorkouts);
 
 	const firstStart = useRef(true);
 	const tick = useRef();
@@ -22,14 +20,6 @@ const WorkoutTimer = ({ workout }) => {
 	useEffect(() => {
 		initializeDisplay();
 	}, [allWorkouts]);
-
-	useEffect(() => {
-		if (editableWorkouts.includes(workout._id)) {
-			setEditable(true);
-		} else {
-			setEditable(false);
-		}
-	}, [editableWorkouts]);
 
 	useEffect(() => {
 		if (firstStart.current) {
@@ -89,12 +79,33 @@ const WorkoutTimer = ({ workout }) => {
 		setIsRestartAvailable(false);
 	};
 
+	const handleIncrement = () => {
+		const newTime = timer + 5;
+		setTimer(newTime);
+	};
+	const handleDecrement = () => {
+		const newTime = timer - 5;
+		setTimer(newTime);
+	};
+
 	return (
 		<div className="timer-wrapper">
 			<div className="timer-display">
 				<h4>Workout Timer:</h4>
-				<div className={`timer-count ${isRunning ? "active" : ""}`}>
-					{timer}
+				<div
+					className={`timer-display-panel ${
+						isRunning ? "active" : ""
+					}`}
+				>
+					<div className="timer-count">{timer}</div>
+					<div className="timer-buttons">
+						<button className="increment" onClick={handleIncrement}>
+							+
+						</button>
+						<button className="decrement" onClick={handleDecrement}>
+							-
+						</button>
+					</div>
 				</div>
 				<div className="timer-remainder">
 					Remaining sets: {remainder}
