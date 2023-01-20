@@ -1,13 +1,13 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const setupDbConnection = async (app) => {
 	try {
 		await mongoose.connect(process.env.MONGO_URI);
 		app.listen(process.env.PORT, () => {
 			console.log(
-				"connected to db & listening on port",
+				'connected to db & listening on port',
 				process.env.PORT
 			);
 		});

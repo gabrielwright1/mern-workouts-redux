@@ -1,22 +1,23 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { URL } from '../../App';
 
 // get user from local storage
-const user = JSON.parse(localStorage.getItem("user"));
+const user = JSON.parse(localStorage.getItem('user'));
 
 const initialState = {
 	user: user ? user : null,
-	loginStatus: "idle",
+	loginStatus: 'idle',
 	loginError: null,
-	signupStatus: "idle",
+	signupStatus: 'idle',
 	signupError: null,
 };
 
 export const loginUser = createAsyncThunk(
-	"users/login",
+	'users/login',
 	async ({ email, password }, { rejectWithValue }) => {
-		const response = await fetch("/api/user/login", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
+		const response = await fetch(`${URL}/api/user/login`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email, password }),
 		});
 
@@ -26,17 +27,17 @@ export const loginUser = createAsyncThunk(
 			return rejectWithValue(json);
 		}
 		if (response.ok) {
-			localStorage.setItem("user", JSON.stringify(json));
+			localStorage.setItem('user', JSON.stringify(json));
 			return json;
 		}
 	}
 );
 export const signupUser = createAsyncThunk(
-	"users/signup",
+	'users/signup',
 	async ({ email, password }, { rejectWithValue }) => {
-		const response = await fetch("/api/user/signup", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
+		const response = await fetch(`${URL}/api/user/signup`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email, password }),
 		});
 		const json = await response.json();
@@ -45,52 +46,51 @@ export const signupUser = createAsyncThunk(
 			return rejectWithValue(json);
 		}
 		if (response.ok) {
-			localStorage.setItem("user", JSON.stringify(json));
+			localStorage.setItem('user', JSON.stringify(json));
 			return json;
 		}
 	}
 );
 
 const userSlice = createSlice({
-	name: "users",
+	name: 'users',
 	initialState,
 	reducers: {
 		logoutUser: (state, action) => {
-			localStorage.removeItem("user");
+			localStorage.removeItem('user');
 
 			state.user = null;
-			state.loginStatus = "idle";
+			state.loginStatus = 'idle';
 			state.loginError = null;
-			state.signupStatus = "idle";
+			state.signupStatus = 'idle';
 			state.signupError = null;
 		},
 	},
 	extraReducers(builder) {
-		builder
-			.addCase(loginUser.pending, (state, action) => {
-				state.loginStatus = "loading";
-				state.loginError = null;
-			})
+		builder.addCase(loginUser.pending, (state, action) => {
+			state.loginStatus = 'loading';
+			state.loginError = null;
+		})
 			.addCase(loginUser.fulfilled, (state, action) => {
-				state.loginStatus = "succeeded";
+				state.loginStatus = 'succeeded';
 				state.loginError = null;
 				state.user = action.payload;
 			})
 			.addCase(loginUser.rejected, (state, action) => {
-				state.loginStatus = "failed";
+				state.loginStatus = 'failed';
 				state.loginError = action.payload.error;
 			})
 			.addCase(signupUser.pending, (state, action) => {
-				state.signupStatus = "loading";
+				state.signupStatus = 'loading';
 				state.signupError = null;
 			})
 			.addCase(signupUser.fulfilled, (state, action) => {
-				state.signupStatus = "succeeded";
+				state.signupStatus = 'succeeded';
 				state.signupError = null;
 				state.user = action.payload;
 			})
 			.addCase(signupUser.rejected, (state, action) => {
-				state.signupStatus = "failed";
+				state.signupStatus = 'failed';
 				state.signupError = action.payload.error;
 			});
 	},

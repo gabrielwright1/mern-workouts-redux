@@ -1,26 +1,27 @@
 // modules
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { URL } from '../../App';
 
 // initial state
 const initialState = {
 	workouts: [],
-	fetchStatus: "idle",
+	fetchStatus: 'idle',
 	fetchError: null,
-	deleteStatus: "idle",
+	deleteStatus: 'idle',
 	deleteError: null,
-	createFormStatus: "idle",
+	createFormStatus: 'idle',
 	createFormError: null,
 	createFormEmptyFields: [],
-	updateWorkoutStatus: "idle",
+	updateWorkoutStatus: 'idle',
 	editableWorkouts: [],
 	erroredWorkouts: [],
 };
 
 // async functions - thunks
 export const fetchWorkouts = createAsyncThunk(
-	"workouts/fetchWorkouts",
+	'workouts/fetchWorkouts',
 	async (user, { rejectWithValue }) => {
-		const response = await fetch("/api/workouts", {
+		const response = await fetch(`${URL}/api/workouts`, {
 			headers: { Authorization: `Bearer ${user.token}` },
 		});
 		const json = await response.json();
@@ -35,24 +36,29 @@ export const fetchWorkouts = createAsyncThunk(
 );
 
 export const deleteWorkout = createAsyncThunk(
-	"workouts/deleteWorkout",
+	'workouts/deleteWorkout',
 	async ({ workout, user }) => {
-		const response = await fetch(`/api/workouts/${workout._id}`, {
-			method: "DELETE",
-			headers: { Authorization: `Bearer ${user.token}` },
-		});
+		const response = await fetch(
+			`${URL}/api/workouts/${workout._id}`,
+			{
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
+		);
 		return response.json();
 	}
 );
 
 export const createWorkout = createAsyncThunk(
-	"workouts/createWorkout",
+	'workouts/createWorkout',
 	async ({ workout, user }, { rejectWithValue }) => {
-		const response = await fetch("/api/workouts", {
-			method: "POST",
+		const response = await fetch(`${URL}/api/workouts`, {
+			method: 'POST',
 			body: JSON.stringify(workout),
 			headers: {
-				"Content-Type": "application/json",
+				'Content-Type': 'application/json',
 				Authorization: `Bearer ${user.token}`,
 			},
 		});
@@ -68,16 +74,19 @@ export const createWorkout = createAsyncThunk(
 );
 
 export const updateWorkout = createAsyncThunk(
-	"workouts/updateWorkout",
+	'workouts/updateWorkout',
 	async ({ workout, user }, { rejectWithValue }) => {
-		const response = await fetch(`/api/workouts/${workout.id}`, {
-			method: "PATCH",
-			body: JSON.stringify(workout),
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${user.token}`,
-			},
-		});
+		const response = await fetch(
+			`${URL}/api/workouts/${workout.id}`,
+			{
+				method: 'PATCH',
+				body: JSON.stringify(workout),
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${user.token}`,
+				},
+			}
+		);
 		const json = await response.json();
 
 		if (!response.ok) {
@@ -91,7 +100,7 @@ export const updateWorkout = createAsyncThunk(
 
 // slice
 const workoutsSlice = createSlice({
-	name: "workouts",
+	name: 'workouts',
 	initialState,
 	reducers: {
 		openForm: (state, action) => {
@@ -105,95 +114,116 @@ const workoutsSlice = createSlice({
 					return editableId !== id;
 				}
 			);
-			state.erroredWorkouts = state.erroredWorkouts.filter((errored) => {
-				return errored.id !== id;
-			});
+			state.erroredWorkouts = state.erroredWorkouts.filter(
+				(errored) => {
+					return errored.id !== id;
+				}
+			);
 		},
 		resetForms: (state, action) => {
 			state.workouts = [];
-			state.fetchStatus = "idle";
+			state.fetchStatus = 'idle';
 			state.fetchError = null;
-			state.deleteStatus = "idle";
+			state.deleteStatus = 'idle';
 			state.deleteError = null;
-			state.createFormStatus = "idle";
+			state.createFormStatus = 'idle';
 			state.createFormError = null;
 			state.createFormEmptyFields = [];
-			state.updateWorkoutStatus = "idle";
+			state.updateWorkoutStatus = 'idle';
 			state.editableWorkouts = [];
 			state.erroredWorkouts = [];
 		},
 	},
 	extraReducers(builder) {
-		builder
-			.addCase(fetchWorkouts.pending, (state, action) => {
-				state.fetchStatus = "loading";
-			})
+		builder.addCase(fetchWorkouts.pending, (state, action) => {
+			state.fetchStatus = 'loading';
+		})
 			.addCase(fetchWorkouts.fulfilled, (state, action) => {
-				state.fetchStatus = "succeeded";
+				state.fetchStatus = 'succeeded';
 				state.workouts = action.payload;
 			})
 			.addCase(fetchWorkouts.rejected, (state, action) => {
-				state.fetchStatus = "failed";
+				state.fetchStatus = 'failed';
 				state.fetchError =
-					"Something went wrong while fetching the workouts";
+					'Something went wrong while fetching the workouts';
 			})
 			.addCase(deleteWorkout.pending, (state, action) => {
-				state.deleteStatus = "loading";
+				state.deleteStatus = 'loading';
 			})
 			.addCase(deleteWorkout.fulfilled, (state, action) => {
-				state.deleteStatus = "succeeded";
-				state.workouts = state.workouts.filter((workout) => {
-					return workout._id !== action.payload._id;
-				});
+				state.deleteStatus = 'succeeded';
+				state.workouts = state.workouts.filter(
+					(workout) => {
+						return (
+							workout._id !==
+							action.payload._id
+						);
+					}
+				);
 			})
 			.addCase(deleteWorkout.rejected, (state, action) => {
-				state.deleteStatus = "failed";
+				state.deleteStatus = 'failed';
 				state.deleteError = action.error.message;
 			})
 			.addCase(createWorkout.pending, (state, action) => {
-				state.createFormStatus = "loading";
+				state.createFormStatus = 'loading';
 
 				// clear error when pending
 				state.createFormError = null;
 				state.createFormEmptyFields = [];
 			})
 			.addCase(createWorkout.fulfilled, (state, action) => {
-				state.createFormStatus = "succeeded";
-				state.workouts = [action.payload, ...state.workouts];
+				state.createFormStatus = 'succeeded';
+				state.workouts = [
+					action.payload,
+					...state.workouts,
+				];
 			})
 			.addCase(createWorkout.rejected, (state, action) => {
-				state.createFormStatus = "failed";
-				state.createFormEmptyFields = action.payload.emptyFields;
+				state.createFormStatus = 'failed';
+				state.createFormEmptyFields =
+					action.payload.emptyFields;
 				state.createFormError = action.payload.error;
 			})
 			.addCase(updateWorkout.pending, (state, action) => {
-				state.updateWorkoutStatus = "loading";
+				state.updateWorkoutStatus = 'loading';
 			})
 			.addCase(updateWorkout.fulfilled, (state, action) => {
-				state.updateWorkoutStatus = "succeeded";
+				state.updateWorkoutStatus = 'succeeded';
 
 				const { _id } = action.payload;
 
 				// add to workouts
 				state.workouts = state.workouts.map((workout) =>
-					workout._id === _id ? action.payload : workout
+					workout._id === _id
+						? action.payload
+						: workout
 				);
 
 				// remove from editableWorkouts
-				state.editableWorkouts = state.editableWorkouts.filter(
-					(workout) => workout !== _id
-				);
+				state.editableWorkouts =
+					state.editableWorkouts.filter(
+						(workout) => workout !== _id
+					);
 
 				// remove from erroredWorkouts
-				state.erroredWorkouts = state.erroredWorkouts.filter(
-					(workout) => workout.id !== _id
-				);
+				state.erroredWorkouts =
+					state.erroredWorkouts.filter(
+						(workout) => workout.id !== _id
+					);
 			})
 			.addCase(updateWorkout.rejected, (state, action) => {
-				state.updateWorkoutStatus = "failed";
+				state.updateWorkoutStatus = 'failed';
 
-				const { id, emptyFields, title, load, reps, sets, error } =
-					action.payload;
+				const {
+					id,
+					emptyFields,
+					title,
+					load,
+					reps,
+					sets,
+					error,
+				} = action.payload;
 
 				let pendingFields = { title, load, reps, sets };
 
@@ -212,19 +242,23 @@ const workoutsSlice = createSlice({
 
 				// if it exists then update it, otherwise add it
 				if (
-					state.erroredWorkouts.some((workout) => workout.id === id)
+					state.erroredWorkouts.some(
+						(workout) => workout.id === id
+					)
 				) {
-					state.erroredWorkouts = state.erroredWorkouts.map(
-						(workout) =>
-							workout.id === id
-								? {
-										id,
-										error,
-										pendingFields,
-										emptyFields,
-								  }
-								: workout
-					);
+					state.erroredWorkouts =
+						state.erroredWorkouts.map(
+							(workout) =>
+								workout.id ===
+								id
+									? {
+											id,
+											error,
+											pendingFields,
+											emptyFields,
+									  }
+									: workout
+						);
 				} else {
 					state.erroredWorkouts.push({
 						id,

@@ -13,6 +13,11 @@ app.use((req, res, next) => {
 	console.log(req.path, req.method);
 	next();
 });
+app.use(
+	cors({
+		origin: ['https://mern-workouts-redux.onrender.com'],
+	})
+);
 
 // routes
 app.use('/api/workouts', workoutRoutes);
