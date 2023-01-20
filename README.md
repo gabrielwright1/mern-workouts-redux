@@ -2,7 +2,7 @@
 
 ## Live site:
 
-https://mern-workouts-redux.herokuapp.com/
+https://mern-workouts-redux.onrender.com/
 
 ## Objectives:
 
