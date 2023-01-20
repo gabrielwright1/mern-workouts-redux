@@ -1,4 +1,4 @@
-const path = require('path');
+const cors = require('cors');
 const express = require('express');
 const workoutRoutes = require('./routes/workoutRoutes');
 const userRoutes = require('./routes/userRoutes');
