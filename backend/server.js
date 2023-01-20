@@ -23,9 +23,5 @@ app.use(
 app.use('/api/workouts', workoutRoutes);
 app.use('/api/user', userRoutes);
 
-app.get('/', (req, res) => {
-	res.send('Welcome to the home page');
-});
-
 // connect to db
 setupDbConnection(app);
